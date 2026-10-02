@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>결제가 취소되었습니다</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body{background:#1E2550;color:#F6F3EA;font-family:"Noto Sans KR",system-ui,sans-serif;
+ min-height:100dvh;display:grid;place-items:center;padding:24px;margin:0;text-align:center}
+h1{font-family:"Noto Serif KR",serif;font-weight:700;font-size:26px;margin:0 0 14px}
+p{color:#C2C7DE;line-height:1.85;font-size:15px;max-width:400px;margin:0 auto 10px}
+a.btn{display:inline-block;margin-top:24px;padding:15px 28px;background:#EBD69F;color:#1E2550;
+ border-radius:2px;text-decoration:none;font-family:"Noto Serif KR",serif;font-weight:700}
+</style></head><body>
+<div>
+  <h1>결제가 완료되지 않았습니다</h1>
+  <p id="msg">결제가 취소되었거나 중간에 중단되었습니다. 금액은 청구되지 않습니다.</p>
+  <a class="btn" id="back" href="/">돌아가기</a>
+</div>
+<script>
+const p = new URLSearchParams(location.search);
+if (p.get("message")) document.getElementById("msg").textContent = p.get("message");
+document.getElementById("back").href = p.get("from") || "/";
+</script></body></html>
