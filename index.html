@@ -373,6 +373,10 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
   .reveal .han{animation:ink .5s both}
   @keyframes ink{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 }
+
+button,select,input,a{touch-action:manipulation}
+button{-webkit-tap-highlight-color:transparent}
+.actions button,.go,.unlock,.seg button,.qhead{min-height:46px}
 </style>
 <link rel="manifest" href="/manifest.json">
 <script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));</script>
@@ -438,7 +442,7 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
     <select id="job"></select>
   </div>
 
-  <button class="go" id="submit">명식 보기</button>
+  <button type="button" class="go" id="submit">명식 보기</button>
   <p class="err" id="err"></p>
 </section>
 
@@ -476,8 +480,8 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
   </div>
 
   <div class="actions">
-    <button class="save" id="save">이미지로 저장</button>
-    <button class="next" id="next">내 사주 30가지 보기</button>
+    <button type="button" class="save" id="save">이미지로 저장</button>
+    <button type="button" class="next" id="next">내 사주 30가지 보기</button>
   </div>
   <button class="again" id="again">다시 입력하기</button>
 </section>
@@ -603,7 +607,7 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
           <a href="/terms.html" target="_blank" rel="noopener">환불 규정</a></span>
         </label>
       </div>
-      <button class="unlock" id="unlock">서른 가지 전부 열기</button>
+      <button type="button" class="unlock" id="unlock">서른 가지 전부 열기</button>
     </div>
   </div>
     <div class="more">
@@ -1800,6 +1804,198 @@ function jobMatch(saju, jobValue) {
       : `지금 자리에서 ${mf.best.k} 쪽으로 다리를 놓는 가장 쉬운 방법은 ${mf.best.good.split(",")[0].trim()}입니다. 지금 하는 일을 소재로 삼으면 처음부터 시작하지 않아도 됩니다.`,
     mode: `일하는 방식은 ${wm.key}입니다. ${wm.do[0]}`,
     all: mf.all.map((f, i) => ({ rank: i + 1, k: f.k, cur: f.k === opt.field })),
+  };
+}
+
+/* ═══ 택일 — 좋은 날 고르기 ══════════════════════════ */
+const TAEKIL_PURPOSE = [
+  { v:"contract", label:"계약·서명",     want:["정재","정관","정인"], avoid:["겁재","상관"],
+    tip:"도장 찍는 일은 정(正)이 붙은 날이 좋습니다. 조건을 끝까지 읽을 수 있는 차분한 날을 고르는 것이 핵심입니다." },
+  { v:"open",     label:"개업·오픈",     want:["편재","식신","정관"], avoid:["겁재","편관"],
+    tip:"시작하는 날은 재성과 식상이 함께 서는 날이 좋습니다. 사람이 모이고 첫 매출이 붙는 흐름입니다." },
+  { v:"move",     label:"이사·이전",     want:["정인","정재","식신"], avoid:["편관","겁재"],
+    tip:"이사는 자리를 바꾸는 일이라 인성이 받쳐주는 날이 안정적입니다. 역마가 함께 서면 더 수월합니다." },
+  { v:"exam",     label:"면접·시험",     want:["정인","정관","편인"], avoid:["상관","겁재"],
+    tip:"평가받는 자리는 인성과 관성이 서는 날이 유리합니다. 말이 앞서는 날은 피하는 편이 낫습니다." },
+  { v:"wed",      label:"결혼·상견례",   want:["정관","정재","정인"], avoid:["상관","편관"],
+    tip:"두 집안이 만나는 날은 충이 없는 날을 먼저 고릅니다. 화려함보다 무탈함이 기준입니다." },
+  { v:"health",   label:"수술·치료",     want:["정인","식신"],        avoid:["편관","상관","겁재"],
+    tip:"몸을 다루는 일은 관성이 센 날을 피합니다. 회복을 돕는 인성과 식신이 서는 날을 고릅니다." },
+  { v:"meeting",  label:"중요 미팅·발표", want:["식신","정관","편재"], avoid:["편관","겁재"],
+    tip:"말로 승부하는 자리는 식상이 서되 상관이 치우치지 않는 날이 좋습니다." },
+  { v:"money",    label:"투자·큰 지출",   want:["정재","편재","정관"], avoid:["겁재","상관"],
+    tip:"돈이 나가는 결정은 겁재가 선 날을 반드시 피합니다. 그날 내린 판단은 대개 되돌아옵니다." },
+  { v:"start",    label:"새 일 시작",     want:["식신","편재","비견"], avoid:["편관","겁재"],
+    tip:"시작은 식상이 서는 날이 좋습니다. 첫날의 흐름이 그 일의 성격을 오래 끌고 갑니다." },
+];
+
+/**
+ * 택일 — 지정 기간에서 좋은 날과 피할 날을 뽑는다
+ * @param {object} saju
+ * @param {object} o  { purpose, from(Date), days(기본 90), count(기본 5) }
+ */
+function buildTaekil(saju, o = {}) {
+  const st = analyzeStrength(saju);
+  const me = saju.dayMaster.element;
+  const meYin = saju.dayMaster.yinyang === "양" ? 0 : 1;
+  const P = TAEKIL_PURPOSE.find(p => p.v === (o.purpose || "contract")) || TAEKIL_PURPOSE[0];
+  const start = o.from instanceof Date ? new Date(o.from) : new Date();
+  const days = o.days || 90, count = o.count || 5;
+  const dayBranch = saju.pillars.day.branch;
+
+  const rows = [];
+  for (let i = 0; i < days; i++) {
+    const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+    const g = dayGanji(d);
+    const ss = sipsinOf(me, meYin, RGAN_EL[g.stem], RGAN_YIN[g.stem]);
+    const bs = sipsinOf(me, meYin, RJI_EL[g.branch], RJI_YIN[g.branch]);
+    const els = [RGAN_EL[g.stem], RJI_EL[g.branch]];
+    const why = [], caution = [];
+    let s = 50;
+
+    if (P.want.includes(ss)) { s += 16; why.push(`천간에 ${ss}`); }
+    if (P.want.includes(bs)) { s += 13; why.push(`지지에 ${bs}`); }
+    if (P.avoid.includes(ss)) { s -= 17; caution.push(`천간에 ${ss}`); }
+    if (P.avoid.includes(bs)) { s -= 14; caution.push(`지지에 ${bs}`); }
+    if (els.includes(st.yongsin)) { s += 14; why.push(`용신 ${st.yongsin}`); }
+    if (els.includes(st.gisin))   { s -= 12; caution.push(`기신 ${st.gisin}`); }
+    if (YUKHAP[dayBranch] === g.branch) { s += 12; why.push("일지와 육합"); }
+    if (SAMHAP[dayBranch] === SAMHAP[g.branch] && dayBranch !== g.branch) { s += 7; why.push("일지와 삼합"); }
+    if (CHUNG[dayBranch] === g.branch) { s -= 20; caution.push("일지를 충함"); }
+    if (HYEONG[dayBranch] === g.branch) { s -= 10; caution.push("일지와 형"); }
+    if (saju.gongmang.includes(g.branch)) { s -= 13; caution.push("공망일"); }
+    s = Math.max(5, Math.min(97, Math.round(s)));
+
+    rows.push({
+      date: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`,
+      label: `${d.getMonth()+1}월 ${d.getDate()}일`,
+      dow: ["일","월","화","수","목","금","토"][d.getDay()],
+      ganji: g.stemCn + g.branchCn,
+      sipsin: `${ss}·${bs}`,
+      score: s, grade: GRADE(s),
+      why: why.join(", ") || "특별히 받쳐주는 요소 없음",
+      caution: caution.join(", ") || "",
+    });
+  }
+
+  const best = [...rows].sort((a,b) => b.score - a.score).slice(0, count)
+                        .sort((a,b) => a.date.localeCompare(b.date));
+  const worst = [...rows].sort((a,b) => a.score - b.score).slice(0, 3)
+                         .sort((a,b) => a.date.localeCompare(b.date));
+
+  return {
+    purpose: P.label, tip: P.tip,
+    range: `${rows[0].label} ~ ${rows[rows.length-1].label}`,
+    best, worst, all: rows,
+    note: `일간 ${saju.dayMaster.stemCn}을 기준으로 ${days}일치 일진을 모두 계산해 ${P.label}에 맞는 날을 골랐습니다. 점수는 목적에 맞는 십신, 용신·기신, 일지와의 합충, 공망을 합산한 값입니다.`,
+  };
+}
+
+/* ═══ 결정 상담 ══════════════════════════════════════ */
+const DECISION_Q = [
+  { v:"partner",  label:"동업을 해도 될까요?",        want:["정재","정관"],        avoid:["겁재","비견"],
+    yes:"지금은 사람과 묶여도 괜찮은 흐름입니다. 다만 지분과 역할은 반드시 문서로 남기세요.",
+    no:"지금은 묶이지 않는 편이 낫습니다. 특히 돈이 섞이는 형태는 미루세요. 꼭 해야 한다면 계약 범위를 좁게 시작하세요." },
+  { v:"quit",     label:"지금 그만둬도 될까요?",      want:["식신","상관","편재"], avoid:["정관","편관"],
+    yes:"나가는 흐름이 받쳐줍니다. 다만 다음 자리를 정하고 움직이세요. 충동적으로 나가면 같은 자리로 돌아옵니다.",
+    no:"지금은 버티는 쪽이 유리합니다. 관성이 서 있어 자리가 주는 것이 더 많은 시기입니다. 나가고 싶은 마음은 기록만 해두세요." },
+  { v:"startup",  label:"창업해도 될까요?",          want:["편재","식신","비견"], avoid:["편관","정인"],
+    yes:"시작하기 좋은 흐름입니다. 규모를 미리 정하고 들어가세요. 이 사주는 벌이는 속도가 빠릅니다.",
+    no:"지금은 준비 구간입니다. 기술과 고객을 손에 쥔 뒤가 안전합니다. 6개월만 더 쌓고 보세요." },
+  { v:"lease",    label:"이 집을 계약해도 될까요?",   want:["정인","정재"],        avoid:["겁재","편관"],
+    yes:"문서가 풀리는 흐름입니다. 조건만 끝까지 확인하면 무리가 없습니다.",
+    no:"서류에서 어긋날 수 있는 시기입니다. 급하게 정하지 말고 한 사람 더 확인을 거치세요." },
+  { v:"invest",   label:"투자해도 될까요?",          want:["정재","편재"],        avoid:["겁재","상관"],
+    yes:"재성이 서는 흐름이라 판단이 밝습니다. 다만 상한선을 먼저 정하고 들어가세요.",
+    no:"지금은 지키는 쪽입니다. 좋아 보이는 제안일수록 조심하세요. 이 시기의 손실은 대개 서두름에서 나옵니다." },
+  { v:"confess",  label:"마음을 표현해도 될까요?",    want:["식신","정재","정관"], avoid:["편관","겁재"],
+    yes:"표현이 닿는 흐름입니다. 미루면 다음 기회가 한참 뒤입니다.",
+    no:"지금은 오해가 끼기 쉬운 시기입니다. 한 달만 두고 보세요. 같은 말도 전혀 다르게 닿습니다." },
+  { v:"breakup",  label:"헤어져야 할까요?",          want:["상관","편관"],        avoid:["정재","정관","정인"],
+    yes:"관계가 흔들리는 시기인 것은 맞습니다. 다만 흔들림과 끝은 다릅니다. 이 시기의 결정은 나중에 후회로 남는 경우가 많으니, 결론은 석 달 뒤로 미루세요.",
+    no:"지금은 끝낼 때가 아니라 조정할 때입니다. 관계를 지탱하는 흐름이 아직 남아 있습니다." },
+  { v:"hire",     label:"사람을 들여도 될까요?",      want:["정관","정인","정재"], avoid:["겁재","상관"],
+    yes:"사람이 들어와 자리를 잡는 흐름입니다. 역할을 분명히 적어 시작하세요.",
+    no:"지금 들인 사람과는 마찰이 생기기 쉽습니다. 급하면 단기 계약으로 시작하세요." },
+  { v:"loan",     label:"빚을 내도 될까요?",         want:["정재","편재","정관"], avoid:["겁재","편관"],
+    yes:"감당 범위가 넓어지는 시기입니다. 규모를 먼저 정해두면 무리가 없습니다.",
+    no:"지금은 레버리지를 걸 때가 아닙니다. 이 시기의 부담은 생각보다 오래 갑니다." },
+  { v:"study",    label:"공부를 시작해도 될까요?",    want:["정인","편인","식신"], avoid:["편재","겁재"],
+    yes:"받아들이는 힘이 서는 시기입니다. 지금 시작한 공부는 잘 자리잡습니다.",
+    no:"지금은 밖으로 움직이는 흐름이라 책상에 오래 못 앉습니다. 짧은 과정부터 걸어보세요." },
+];
+
+/** 결정 상담 — 대운·세운·월운을 겹쳐 본다 */
+function buildDecision(saju, qv, ref) {
+  const Q = DECISION_Q.find(q => q.v === qv);
+  if (!Q) return null;
+  const st = analyzeStrength(saju);
+  const me = saju.dayMaster.element;
+  const meYin = saju.dayMaster.yinyang === "양" ? 0 : 1;
+  const now = ref instanceof Date ? ref : new Date();
+  const year = now.getMonth() + 1 < 2 ? now.getFullYear() - 1 : now.getFullYear();
+
+  const age = Math.floor(exactAge(saju));
+  const dae = saju.daeun.list.find(d => age >= d.startAge && age < d.startAge + 10) || saju.daeun.list[0];
+
+  const si = ((year - 4) % 10 + 10) % 10, bi = ((year - 4) % 12 + 12) % 12;
+  const ys = RGAN[si], yb = RJI[bi];
+  const yss = sipsinOf(me, meYin, RGAN_EL[ys], RGAN_YIN[ys]);
+  const ybs = sipsinOf(me, meYin, RJI_EL[yb], RJI_YIN[yb]);
+
+  // 이번 달 월운
+  const mIdx = (now.getMonth() + 11) % 12;            // 대략 절기월
+  const mb = RJI[(2 + mIdx) % 12];
+  const msIdx = ((si % 5) * 2 + 2 + mIdx) % 10;
+  const ms = RGAN[msIdx];
+  const mss = sipsinOf(me, meYin, RGAN_EL[ms], RGAN_YIN[ms]);
+  const mbs = sipsinOf(me, meYin, RJI_EL[mb], RJI_YIN[mb]);
+
+  let s = 50;
+  const plus = [], minus = [];
+  const check = (name, sip, w) => {
+    if (Q.want.includes(sip))  { s += w;     plus.push(`${name} ${sip}`); }
+    if (Q.avoid.includes(sip)) { s -= w + 2; minus.push(`${name} ${sip}`); }
+  };
+  check("대운", dae.sipsin, 14);
+  check("올해 천간", yss, 12);
+  check("올해 지지", ybs, 10);
+  check("이달 천간", mss, 9);
+  check("이달 지지", mbs, 7);
+  if ([RGAN_EL[ys], RJI_EL[yb]].includes(st.yongsin)) { s += 10; plus.push(`올해 용신 ${st.yongsin}`); }
+  if ([RGAN_EL[ys], RJI_EL[yb]].includes(st.gisin))   { s -= 10; minus.push(`올해 기신 ${st.gisin}`); }
+  s = Math.max(8, Math.min(95, Math.round(s)));
+
+  const verdict = s >= 68 ? "지금이 좋습니다" : s >= 52 ? "해도 되지만 조건을 맞추세요"
+                : s >= 40 ? "서두르지 마세요" : "지금은 미루세요";
+  const body = s >= 52 ? Q.yes : Q.no;
+
+  // 더 나은 시기
+  const better = [];
+  for (let y = year; y <= year + 5; y++) {
+    const a = ((y - 4) % 10 + 10) % 10, b2 = ((y - 4) % 12 + 12) % 12;
+    const s1 = sipsinOf(me, meYin, RGAN_EL[RGAN[a]], RGAN_YIN[RGAN[a]]);
+    const s2 = sipsinOf(me, meYin, RJI_EL[RJI[b2]], RJI_YIN[RJI[b2]]);
+    let v = 0;
+    if (Q.want.includes(s1)) v += 2;
+    if (Q.want.includes(s2)) v += 2;
+    if (Q.avoid.includes(s1)) v -= 2;
+    if (Q.avoid.includes(s2)) v -= 2;
+    if ([RGAN_EL[RGAN[a]], RJI_EL[RJI[b2]]].includes(st.yongsin)) v += 2;
+    if (v >= 2) better.push({ year: y, gapjaCn: RGAN_CN[a] + RJI_CN[b2], sipsin: `${s1}·${s2}` });
+  }
+
+  return {
+    question: Q.label, score: s, verdict, body,
+    basis: [
+      `지금 대운은 ${dae.gapjaCn}(${dae.sipsin})입니다. ${DAEUN_NOTE[dae.sipsin]}`,
+      `${year}년 세운은 ${RGAN_CN[si]}${RJI_CN[bi]}, 당신 기준으로 ${yss}·${ybs}입니다.`,
+      `이달 월운은 ${RGAN_CN[msIdx]}${RJI_CN[(2+mIdx)%12]}, ${mss}·${mbs}입니다.`,
+    ],
+    plus: plus.join(", ") || "받쳐주는 요소 없음",
+    minus: minus.join(", ") || "걸리는 요소 없음",
+    better: better.slice(0, 3),
+    caveat: "이 답은 명식과 시기의 흐름만 본 것입니다. 실제 조건과 상대의 사정은 명식에 담기지 않으니, 참고 하나로 두고 결정은 직접 내리세요.",
   };
 }
 
@@ -3749,6 +3945,32 @@ function buildYearReport(saju, year, opts = {}) {
   "use strict";
   const $ = (id) => document.getElementById(id);
 
+  // ── 구형 모바일 브라우저 대응 ─────────────
+  // iOS 15.3 이하에서 scrollTo({behavior:"instant"}) 는 TypeError 를 던져
+  // 그 뒤 코드가 전부 멈춥니다. 안전한 함수로 감쌉니다.
+  function toTop(){ try { window.scrollTo(0, 0); } catch(e) {} }
+  function intoView(el, opt){ try { if (el && el.scrollIntoView) el.scrollIntoView(opt); } catch(e) {} }
+
+  // 테스트 모드에서는 오류를 화면에 보여줍니다 (모바일 디버깅용)
+  function showErr(e){
+    if (!window.TEST_MODE) return;
+    let box = document.getElementById("__err");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "__err";
+      box.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:9999;background:#B5564A;color:#fff;" +
+        "font:600 12px/1.6 sans-serif;padding:12px 14px;border-radius:4px;white-space:pre-wrap;word-break:break-all";
+      box.onclick = () => box.remove();
+      document.body.appendChild(box);
+    }
+    box.textContent = "오류: " + (e && (e.message || e)) + "\n(눌러서 닫기)";
+  }
+  window.addEventListener("error", (ev) => showErr(ev.error || ev.message));
+  window.addEventListener("unhandledrejection", (ev) => showErr(ev.reason));
+  function guard(fn){ return function(){ try { return fn.apply(this, arguments); } catch(e) { showErr(e); } }; }
+
+
+
   // pay.js 를 못 불러왔거나 서버가 없는 환경(미리보기 등)에서도 화면은 돌아가야 한다
   if (typeof window.Pay === "undefined") {
     window.Pay = {
@@ -3797,7 +4019,7 @@ function buildYearReport(saju, year, opts = {}) {
 
   function fail(msg){ const e=$("err"); e.textContent=msg; e.style.display="block"; }
 
-  $("submit").onclick = () => {
+  $("submit").onclick = guard(() => {
     $("err").style.display = "none";
     const y=+$("y").value, m=+$("m").value, d=+$("d").value;
     const noHour = $("nohour").checked;
@@ -3823,7 +4045,7 @@ function buildYearReport(saju, year, opts = {}) {
             leapMonth: $("leap").checked, city: sel.value, timeUnknown: noHour,
             job: jobSel.value || "" });
     render(r);
-  };
+  });
 
   function render(r){
     currentSaju = r;
@@ -3885,7 +4107,7 @@ function buildYearReport(saju, year, opts = {}) {
 
     $("form").style.display = "none";
     $("result").style.display = "block";
-    window.scrollTo({ top: 0, behavior: "instant" });
+    toTop();
 
     // 년→월→일→시 순으로 먹이 배어들듯
     const card = $("card");
@@ -3899,15 +4121,15 @@ function buildYearReport(saju, year, opts = {}) {
     const nowD = r.daeun.list.find(d => age >= d.startAge && age < d.startAge + 10);
     if (nowD) setTimeout(() => {
       const el = document.querySelector(".du.now");
-      if (el) el.scrollIntoView({ inline:"center", block:"nearest", behavior:"smooth" });
+      if (el) intoView(el, { inline:"center", block:"nearest", behavior:"smooth" });
     }, 700);
   }
 
-  $("again").onclick = () => {
+  $("again").onclick = guard(() => {
     $("result").style.display = "none";
     $("form").style.display = "block";
-    window.scrollTo({ top: 0, behavior: "instant" });
-  };
+    toTop();
+  });
 
   $("save").onclick = async () => {
     const btn = $("save"), card = $("card");
@@ -3956,7 +4178,7 @@ function buildYearReport(saju, year, opts = {}) {
       const btn = row.querySelector(".qhead");
       btn.onclick = () => {
         if (!row.classList.contains("free")) {
-          $("tease").scrollIntoView({ behavior:"smooth", block:"center" });
+          intoView($("tease"), { behavior:"smooth", block:"center" });
           return;
         }
         const on = row.classList.toggle("open");
@@ -3978,7 +4200,7 @@ function buildYearReport(saju, year, opts = {}) {
     $("result").style.display = "none";
     $("report").style.display = "block";
     selectTab("life");
-    window.scrollTo({ top: 0, behavior: "instant" });
+    toTop();
   }
 
   $("unlock").onclick = async () => {
@@ -4244,17 +4466,17 @@ function buildYearReport(saju, year, opts = {}) {
     if (which === "year") { paintSeason(); showYear(); }
     if (which === "love") showLove();
     if (which === "compat") showCompat();
-    window.scrollTo({ top: 0, behavior: "instant" });
+    toTop();
   }
   Object.keys(VIEWS).forEach(k => { $("tab-" + k).onclick = () => selectTab(k); });
 
-  $("back").onclick = () => {
+  $("back").onclick = guard(() => {
     $("report").style.display = "none";
     $("result").style.display = "block";
-    window.scrollTo({ top: 0, behavior: "instant" });
-  };
+    toTop();
+  });
 
-  $("next").onclick = showReport;
+  $("next").onclick = guard(showReport);
 
   // ── 저장된 프로필 복원 ──────────────────
   (function restore(){

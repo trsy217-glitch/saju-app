@@ -107,6 +107,10 @@ select:focus,input:focus{outline:2px solid var(--pt);outline-offset:1px;border-c
 .more .dot{width:9px;height:9px;border-radius:50%;flex:none}
 .more .tt{flex:1;font-family:var(--serif);font-weight:700;font-size:15.5px;color:var(--ink)}
 .more .pr{font-family:var(--serif);font-weight:700;font-size:12.5px;color:var(--pt)}
+
+button,select,input,a{touch-action:manipulation}
+button{-webkit-tap-highlight-color:transparent}
+.actions button,.go,.unlock,.seg button,.qhead{min-height:46px}
 </style>
 </head>
 <body>
@@ -3521,6 +3525,32 @@ function buildYearReport(saju, year, opts = {}) {
 (function(){
   "use strict";
   const $ = (id) => document.getElementById(id);
+
+  // ── 구형 모바일 브라우저 대응 ─────────────
+  // iOS 15.3 이하에서 scrollTo({behavior:"instant"}) 는 TypeError 를 던져
+  // 그 뒤 코드가 전부 멈춥니다. 안전한 함수로 감쌉니다.
+  function toTop(){ try { window.scrollTo(0, 0); } catch(e) {} }
+  function intoView(el, opt){ try { if (el && el.scrollIntoView) el.scrollIntoView(opt); } catch(e) {} }
+
+  // 테스트 모드에서는 오류를 화면에 보여줍니다 (모바일 디버깅용)
+  function showErr(e){
+    if (!window.TEST_MODE) return;
+    let box = document.getElementById("__err");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "__err";
+      box.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:9999;background:#B5564A;color:#fff;" +
+        "font:600 12px/1.6 sans-serif;padding:12px 14px;border-radius:4px;white-space:pre-wrap;word-break:break-all";
+      box.onclick = () => box.remove();
+      document.body.appendChild(box);
+    }
+    box.textContent = "오류: " + (e && (e.message || e)) + "\n(눌러서 닫기)";
+  }
+  window.addEventListener("error", (ev) => showErr(ev.error || ev.message));
+  window.addEventListener("unhandledrejection", (ev) => showErr(ev.reason));
+  function guard(fn){ return function(){ try { return fn.apply(this, arguments); } catch(e) { showErr(e); } }; }
+
+
   window.TEST_MODE = true;
   if (window.TEST_MODE) $("testbar").style.display = "block";
 
