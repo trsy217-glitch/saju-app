@@ -3,361 +3,212 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>인연사주 — 내 사람은 어디에 있나</title>
-<meta name="description" content="배우자성과 배우자궁으로 내 인연의 성격, 만나는 자리, 열리는 해를 서른 가지로 봅니다.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  /* 자주(紫朱) — 운세 카테고리의 표준색인 보라 계열 */
-  --ho-900:#FFF5F7;
-  --ho-800:#FDEAEF;
-  --ho-700:#F7DFE6;
-  --ho-line:#F0CBD6;
-  --geum:#C2566F;
-  --geum-dim:#5BB5A4;
-  --ink:#3D2B31;
-  --mut:#7A646B;
-  --mut2:#9A8188;
-
-  --serif:"Noto Serif KR",serif;
-  --sans:"Noto Sans KR",-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo",sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-html{-webkit-text-size-adjust:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
-body{background:var(--ho-900);color:var(--ink);font-family:var(--sans);line-height:1.6;
-  min-height:100dvh;padding:0 20px 64px;display:flex;justify-content:center}
-.wrap{width:100%;max-width:560px}
-
-header{padding:56px 0 34px;text-align:center}
-.mark{font-family:var(--serif);font-weight:700;font-size:13px;letter-spacing:.5em;color:var(--geum-dim);margin-bottom:18px;padding-left:.5em}
-h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,8.5vw,42px);line-height:1.3}
-.sub{margin-top:14px;font-size:14.5px;color:var(--mut);font-weight:500;max-width:30em;margin-inline:auto}
-
-.panel{border-top:1px solid var(--ho-line);padding-top:28px}
-.field{margin-bottom:22px}
-label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin-bottom:8px}
-input,select{width:100%;background:var(--ho-800);border:1px solid var(--ho-line);color:var(--ink);
-  font-family:var(--sans);font-size:16px;font-weight:600;padding:13px 14px;border-radius:2px}
-input:focus,select:focus{outline:2px solid var(--geum);outline-offset:1px;border-color:transparent}
-select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--geum-dim) 50%),linear-gradient(135deg,var(--geum-dim) 50%,transparent 50%);background-position:calc(100% - 18px) 21px,calc(100% - 13px) 21px;background-size:5px 5px;background-repeat:no-repeat}
-.row{display:grid;gap:12px}
-.row.three{grid-template-columns:1.2fr 1fr 1fr}
-.row.two{grid-template-columns:1fr 1fr}
-.seg{display:flex;border:1px solid var(--ho-line);border-radius:2px;overflow:hidden}
-.seg button{flex:1;background:transparent;border:0;color:var(--mut2);font-family:var(--sans);font-weight:600;font-size:14.5px;padding:12px 0;cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--geum);color:#FFFFFF;font-weight:700}
-.seg button:focus-visible{outline:2px solid var(--geum);outline-offset:-4px}
-.check{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--mut);cursor:pointer}
-.check input{width:17px;height:17px;accent-color:var(--geum);flex:none}
-.go{width:100%;margin-top:8px;padding:17px;border:0;border-radius:2px;background:var(--geum);color:#FFFFFF;
-  font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.06em;cursor:pointer}
-.go:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-.err{margin-top:14px;font-size:14px;color:#C0563F;display:none}
-
-#result{display:none}
-
-/* 요약 판 */
-.stats{border:1px solid var(--geum-dim);background:var(--ho-800);padding:26px 20px;margin-top:8px}
-.stats .bowl{font-family:var(--serif);font-weight:700;font-size:23px;color:var(--geum);text-align:center;line-height:1.4}
-.stats .who{text-align:center;font-size:12.5px;color:var(--mut2);font-weight:600;margin-top:10px}
-.stats .bars{margin-top:22px;display:grid;gap:13px}
-.bl{display:flex;align-items:center;gap:11px}
-.bl .nm{font-size:12.5px;color:var(--mut);font-weight:600;min-width:74px}
-.bl .tr{flex:1;height:7px;background:#F3D6DE;border-radius:1px;overflow:hidden}
-.bl .tr i{display:block;height:100%;background:var(--geum)}
-.bl .vl{font-family:var(--serif);font-weight:700;font-size:13.5px;min-width:44px;text-align:right}
-.leak{margin-top:20px;padding-top:18px;border-top:1px solid var(--ho-line);text-align:center}
-.leak b{display:block;font-size:12px;color:var(--mut2);font-weight:600;margin-bottom:6px}
-.leak span{font-family:var(--serif);font-weight:700;font-size:19px;color:#C0563F}
-
-/* 훅 */
-.hook{padding:34px 0 30px}
-.hook .hl{font-family:var(--serif);font-weight:500;font-size:17px;line-height:1.5;color:var(--ink);margin-bottom:26px;word-break:keep-all}
-.hook .turn{margin-top:36px;padding-top:30px;border-top:1px solid var(--ho-line)}
-.hook .turn p{font-family:var(--serif);font-weight:700;font-size:18px;line-height:1.5;color:var(--geum);margin-bottom:22px;word-break:keep-all}
-.hook .turn p:last-child{color:var(--ink);font-weight:500}
-
-/* 문항 */
-.qsec{margin-top:30px}
-.qsec > h3{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--geum);letter-spacing:.08em;margin-bottom:3px}
-.qsec > .ss{font-size:12.5px;color:var(--mut2);font-weight:600;margin-bottom:12px}
-.qi{border-top:1px solid #F3D6DE}
-.qi:last-child{border-bottom:1px solid #F3D6DE}
-.qhead{display:flex;align-items:center;gap:11px;padding:15px 2px;cursor:pointer;background:none;border:0;width:100%;text-align:left;font-family:var(--sans)}
-.qhead .qn{font-family:var(--serif);font-weight:700;font-size:12px;color:var(--geum-dim);min-width:19px}
-.qhead .qt{flex:1;font-size:15.5px;font-weight:600;color:var(--ink);line-height:1.5;word-break:keep-all}
-.qhead .qk{font-size:13px;color:var(--geum-dim);flex:none}
-.qi.locked-row .qt{color:var(--mut2)}
-.qi.free .qhead .qk{color:var(--geum)}
-.qhead:focus-visible{outline:2px solid var(--geum);outline-offset:-3px}
-.qbody{padding:2px 2px 20px 32px;display:none}
-.qi.open .qbody{display:block}
-.qbody p{font-size:15.5px;line-height:1.95;color:#423036;margin-bottom:13px;word-break:keep-all}
-.qbody p strong{color:var(--geum);font-weight:700}
-.locked{filter:blur(7px);opacity:.5;user-select:none;pointer-events:none}
-
-
-.bl .tr2{flex:1;text-align:right;font-family:var(--serif);font-weight:700;font-size:15px;color:var(--ink)}
-.verify{margin-top:22px;padding-top:18px;border-top:1px solid var(--ho-line)}
-.verify > b{display:block;font-size:12px;color:var(--mut2);font-weight:600;margin-bottom:12px;text-align:center}
-.verify p{font-size:14.5px;line-height:1.85;color:#423036;margin-bottom:12px;word-break:keep-all}
-.verify em{display:block;font-family:var(--serif);font-style:normal;font-weight:700;font-size:13.5px;color:var(--geum);margin-bottom:3px}
-.verify .vq{display:block;margin-top:4px;font-size:12.5px;color:var(--mut2);text-align:center;font-weight:600}
-.qbody .ev,.qbody .act{font-size:13.5px;line-height:1.8;padding:11px 13px;border-radius:2px;margin-top:4px}
-.qbody .ev{background:#FDEAEF;color:var(--mut);border-left:2px solid var(--ho-line)}
-.qbody .act{background:#E6F6F2;color:#2F4F49;border-left:2px solid var(--geum-dim)}
-.qbody .ev b,.qbody .act b{display:block;font-size:11px;letter-spacing:.08em;margin-bottom:4px;font-weight:700}
-.qbody .ev b{color:var(--mut2)} .qbody .act b{color:var(--geum)}
-.disc{margin-top:20px;font-size:12.5px;line-height:1.8;color:var(--mut2);word-break:keep-all;border-top:1px solid var(--ho-line);padding-top:16px}
-
-
-/* ── 궁합 서비스 ───────────────────────── */
-.compat{margin-top:34px;border-top:2px solid var(--geum);padding-top:26px}
-.compat > h3{font-family:var(--serif);font-weight:700;font-size:19px;color:var(--geum);margin-bottom:8px}
-.compat > .cs{font-size:14px;color:var(--mut);line-height:1.8;margin-bottom:22px;word-break:keep-all}
-.free-tag{display:inline-block;margin-left:8px;padding:3px 9px;border:1px solid var(--geum);border-radius:2px;font-size:11px;color:var(--geum);font-weight:700;vertical-align:middle}
-.cscore{text-align:center;border:1px solid var(--geum);background:var(--ho-800);padding:28px 20px;margin:20px 0 8px}
-.cscore .num{font-family:var(--serif);font-weight:700;font-size:54px;line-height:1;color:var(--geum)}
-.cscore .gd{font-family:var(--serif);font-weight:700;font-size:19px;margin-top:10px}
-.cscore .pair{font-size:12.5px;color:var(--mut2);margin-top:12px;font-weight:600}
-.cnote{padding:18px 0;border-bottom:1px solid #F3D6DE}
-.cnote p{font-size:15px;line-height:1.95;color:#423036;margin-bottom:11px;word-break:keep-all}
-.cfld{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #F3D6DE}
-.cfld .ic{font-family:var(--serif);font-weight:700;font-size:16px;width:32px;height:32px;flex:none;display:grid;place-items:center;border:1px solid var(--geum-dim);color:var(--geum)}
-.cfld .cb{flex:1}
-.cfld .cn{font-family:var(--serif);font-weight:700;font-size:15.5px}
-.cfld .ct{font-size:13px;color:var(--mut);margin-top:4px;line-height:1.7}
-.cfld .csc{font-family:var(--serif);font-weight:700;font-size:19px;color:var(--geum);min-width:36px;text-align:right}
-.cclose{margin-top:18px;font-family:var(--serif);font-weight:500;font-size:15.5px;line-height:2;color:var(--ink);word-break:keep-all;padding-left:15px;border-left:1px solid var(--geum-dim)}
-
-
-/* ── 결제 ─────────────────────────────── */
-.buy{margin-top:16px;text-align:left}
-.buy label{display:block;font-size:12.5px;font-weight:600;margin-bottom:7px}
-.buy input[type=email]{width:100%;padding:13px 14px;border-radius:2px;font-size:16px;font-weight:600}
-.agree{display:flex;align-items:flex-start;gap:9px;margin:14px 0 4px;font-size:12.5px;line-height:1.7;cursor:pointer;text-align:left}
-.agree input{width:17px;height:17px;flex:none;margin-top:2px}
-.agree a{text-decoration:underline;text-underline-offset:3px}
-.restore{display:block;width:100%;margin-top:12px;background:none;border:0;font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-family:var(--sans)}
-.paying{opacity:.55;pointer-events:none}
-
-
-/* ── 다른 편으로 ───────────────────────── */
-.more{margin-top:44px;padding-top:28px;border-top:1px solid var(--ho-line)}
-.more h4{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--geum);letter-spacing:.06em;margin-bottom:4px}
-.more .ms{font-size:12.5px;color:var(--mut2);font-weight:600;margin-bottom:16px}
-.more a{display:flex;align-items:center;gap:13px;padding:16px 15px;border:1px solid var(--ho-line);border-radius:2px;
-  text-decoration:none;margin-bottom:9px;transition:border-color .15s}
-.more a:hover,.more a:focus-visible{border-color:var(--geum);outline:none}
-.more .dot{width:9px;height:9px;flex:none;border-radius:50%}
-.more .tx{flex:1}
-.more .tt{font-family:var(--serif);font-weight:700;font-size:16px;color:var(--ink)}
-.more .dd{font-size:12.5px;color:var(--mut2);margin-top:3px;line-height:1.6}
-.more .pr{font-family:var(--serif);font-weight:700;font-size:13px;color:var(--geum);flex:none}
-
-
-/* ── 테스트 모드 표시 ──────────────────── */
-.testbar{position:sticky;top:0;z-index:99;margin:0 -20px 0;padding:9px 16px;background:#C0665F;color:#fff;
-  font-size:12.5px;font-weight:700;text-align:center;letter-spacing:.02em}
-.testbar b{font-weight:700}
-
-/* 결제 */
-.tease{margin-top:24px;border:1px solid var(--geum-dim);padding:26px 22px;text-align:center;background:var(--ho-800)}
-.tease h4{font-family:var(--serif);font-weight:700;font-size:18px;margin-bottom:10px}
-.tease ul{list-style:none;margin:16px 0 20px;text-align:left}
-.tease li{font-size:14.5px;color:var(--mut);padding:8px 0 8px 22px;position:relative;border-top:1px solid #F3D6DE}
-.tease li:before{content:"";position:absolute;left:4px;top:15px;width:7px;height:7px;border:1px solid var(--geum-dim)}
-.price{font-family:var(--serif);font-weight:700;font-size:30px;color:var(--geum);margin:4px 0}
-.price small{font-size:14px;font-weight:500;color:var(--mut2);margin-left:4px}
-.tease .note{font-size:12.5px;color:var(--mut2);margin-bottom:18px}
-.unlock{width:100%;padding:17px;border:0;border-radius:2px;background:var(--geum);color:#FFFFFF;font-family:var(--serif);font-weight:700;font-size:17px;letter-spacing:.05em;cursor:pointer}
-.unlock:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-.again{display:block;width:100%;margin-top:16px;background:none;border:0;color:var(--mut2);font-size:13.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-family:var(--sans)}
-
-button,select,input,a{touch-action:manipulation}
-button{-webkit-tap-highlight-color:transparent}
-.actions button,.go,.unlock,.seg button,.qhead{min-height:46px}
-
-.method{border:1px solid var(--line, #D8CCB2);background:rgba(0,0,0,.025);padding:18px 18px;border-radius:3px;margin:20px 0}
-.method b{display:block;font-size:12px;letter-spacing:.06em;margin-bottom:9px}
-.method p{font-size:13.5px;line-height:1.85;margin-bottom:9px;word-break:keep-all}
-.method p:last-child{margin-bottom:0}
-.method .sh{font-size:12.5px;line-height:1.8;margin:0}
-.method summary{cursor:pointer;font-size:12.5px;font-weight:600;margin-top:8px;list-style:none}
-.method summary::-webkit-details-marker{display:none}
-.method summary::after{content:" 자세히 ▾"}
-.method details[open] summary::after{content:" 접기 ▴"}
-
-.gift{margin-top:12px;border-top:1px solid rgba(0,0,0,.08);padding-top:12px;text-align:left}
-.gift summary{cursor:pointer;font-size:12.5px;font-weight:600;list-style:none;color:inherit}
-.gift summary::-webkit-details-marker{display:none}
-.gift summary::after{content:" ▾"}
-.gift[open] summary::after{content:" ▴"}
-.gift input,.gift textarea{width:100%;margin-top:9px;padding:11px 12px;border-radius:2px;font-size:15px;
- font-family:inherit;border:1px solid var(--line,#D8CCB2)}
-.gift textarea{min-height:64px;resize:vertical}
-.gift p{font-size:12px;margin-top:8px;opacity:.75;line-height:1.7}
-</style>
+<title>택일 — 이사·계약·개업에 좋은 날 고르기</title>
+<meta name="description" content="이사·계약·개업·면접·결혼에 좋은 날을 사주로 골라드립니다. 생년월일을 넣으면 앞으로 석 달 중 좋은 날과 피할 날이 바로 나옵니다.">
+<meta property="og:title" content="택일 — 이사·계약·개업에 좋은 날 고르기">
+<meta property="og:description" content="내 사주에 맞는 좋은 날을 앞으로 석 달 중에서 골라드립니다.">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="manifest" href="/manifest.json">
-<script>if("serviceWorker" in navigator)addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){})});</script>
-</head>
-<body>
-<div class="wrap">
-<div class="testbar" id="testbar" style="display:none">테스트 모드 — 결제 없이 전체가 열립니다. <b>출시 전 TEST_MODE를 false로 바꾸세요.</b></div>
+<style>
+:root{--bg:#F7F5F0;--card:#EFEADF;--card2:#E6DFD0;--line:#D4CBB8;--pt:#7A6436;--pt2:#A89669;
+ --ink:#332E26;--mut:#63594A;--mut2:#847A68;
+ --serif:"Noto Serif KR",serif;--sans:"Noto Sans KR",-apple-system,system-ui,"Apple SD Gothic Neo",sans-serif;
+ padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;padding:0}
+button,select,input,a{touch-action:manipulation}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;
+ min-height:100dvh;padding:0 20px 70px;display:flex;justify-content:center}
+.wrap{width:100%;max-width:560px}
+header{padding:50px 0 26px;text-align:center}
+.mark{font-family:var(--serif);font-weight:700;font-size:12.5px;letter-spacing:.5em;color:var(--pt2);margin-bottom:14px;padding-left:.5em}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(26px,7.5vw,34px);line-height:1.35}
+.sub{margin-top:13px;font-size:14.5px;color:var(--mut);word-break:keep-all}
+h2{font-family:var(--serif);font-weight:700;font-size:19px;margin:38px 0 12px;padding-top:26px;border-top:1px solid var(--line)}
+p{font-size:15px;margin-bottom:12px;word-break:keep-all}
 
+.ganji{border:1px solid var(--pt2);background:var(--card);padding:30px 20px;text-align:center;border-radius:3px}
+.ganji .dt{font-size:13px;color:var(--mut2);font-weight:600}
+.ganji .cn{font-family:var(--serif);font-weight:700;font-size:54px;line-height:1.1;color:var(--pt);margin:8px 0 4px;letter-spacing:.08em}
+.ganji .ko{font-size:14px;color:var(--mut);font-weight:600}
+.ganji .ex{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:14.5px;color:var(--ink);line-height:1.9;word-break:keep-all}
+
+.ask{margin-top:24px;border:1px solid var(--line);background:#fff;padding:22px 20px;border-radius:3px}
+.ask h3{font-family:var(--serif);font-weight:700;font-size:16px;margin-bottom:6px}
+.ask p{font-size:13.5px;color:var(--mut2);margin-bottom:16px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--mut);margin-bottom:7px}
+input,select{width:100%;background:#fff;border:1px solid var(--line);color:var(--ink);font-family:var(--sans);
+ font-size:16px;font-weight:600;padding:12px 13px;border-radius:2px}
+input:focus,select:focus{outline:2px solid var(--pt);outline-offset:1px;border-color:transparent}
+.r3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:9px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.fd{margin-bottom:14px}
+.chk{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--mut);cursor:pointer;margin-top:10px}
+.chk input{width:17px;height:17px;flex:none;accent-color:var(--pt)}
+.go{width:100%;margin-top:6px;padding:15px;border:0;border-radius:2px;background:var(--pt);color:#fff;
+ font-family:var(--serif);font-weight:700;font-size:16px;cursor:pointer;min-height:48px}
+.err{margin-top:10px;font-size:13.5px;color:#B5564A;display:none}
+
+#mine{display:none;margin-top:24px}
+.score{border:1px solid var(--pt);background:var(--card);padding:26px 20px;border-radius:3px}
+.score .hd{display:flex;align-items:baseline;gap:10px}
+.score .nm{font-size:13px;color:var(--mut2);font-weight:600;flex:1}
+.score .big{font-family:var(--serif);font-weight:700;font-size:34px;color:var(--pt);line-height:1}
+.score .gd{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--pt)}
+.score .hl{margin-top:14px;font-size:16px;line-height:1.9;word-break:keep-all}
+.score .de{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.score .de p{font-size:14px;color:var(--mut);margin-bottom:8px;line-height:1.8}
+.f4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.f4 div{border:1px solid var(--line);background:#fff;padding:10px 4px;text-align:center;border-radius:2px}
+.f4 b{display:block;font-size:11px;color:var(--mut2);font-weight:600}
+.f4 span{display:block;font-family:var(--serif);font-weight:700;font-size:17px;margin-top:3px;color:var(--pt)}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:13.5px}
+dl.kv dt{color:var(--mut);font-weight:600;white-space:nowrap}
+dl.kv dd{text-align:right;color:var(--ink);font-weight:600}
+.adv{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--serif);font-weight:500;
+ font-size:15.5px;line-height:1.95;word-break:keep-all}
+
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+th{background:var(--card);color:var(--pt);font-weight:700}
+.faq dt{font-weight:700;font-size:15.5px;margin-top:18px}
+.faq dd{font-size:14.5px;color:var(--mut);margin-top:6px;word-break:keep-all}
+.cta{margin-top:42px;padding-top:26px;border-top:1px solid var(--line)}
+.cta h4{font-family:var(--serif);font-weight:700;font-size:16px;color:var(--pt);margin-bottom:12px}
+.cta a{display:flex;align-items:center;gap:12px;padding:15px;border:1px solid var(--line);border-radius:3px;
+ text-decoration:none;margin-bottom:9px;background:#fff}
+.cta .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.cta .tt{flex:1;font-family:var(--serif);font-weight:700;font-size:15.5px;color:var(--ink)}
+.cta .dd{display:block;font-size:12.5px;color:var(--mut2);font-weight:400;margin-top:2px;font-family:var(--sans)}
+.cta .pr{font-family:var(--serif);font-weight:700;font-size:12.5px;color:var(--pt)}
+.foot{margin-top:30px;font-size:12px;color:var(--mut2);text-align:center}
+.foot a{color:var(--pt)}
+
+.sect{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--pt);margin:26px 0 4px;letter-spacing:.04em}
+.row{display:flex;gap:11px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+.row .rd{min-width:82px}
+.row .rd b{display:block;font-family:var(--serif);font-weight:700;font-size:15.5px}
+.row .rd em{display:block;font-style:normal;font-size:11.5px;color:var(--mut2);font-weight:600}
+.row .rg{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--pt);min-width:42px}
+.row .rx{flex:1;font-size:12.5px;color:var(--mut);line-height:1.65}
+.row .rs{font-family:var(--serif);font-weight:700;font-size:16px;min-width:32px;text-align:right;color:var(--pt)}
+.row.bad .rg,.row.bad .rs{color:#B5564A}
+.memo{margin-top:16px;font-size:12.5px;color:var(--mut2);line-height:1.8}
+</style>
+</head>
+<body><div class="wrap">
 
 <header>
-  <p class="mark">因緣四柱</p>
-  <h1>내 사람은<br>어디에 있나</h1>
-  <p class="sub">상대가 바뀌어도 끝나는 이유가 비슷했다면, 문제는 사람이 아니라 자리입니다. 서른 가지로 짚어드립니다.</p>
+  <p class="mark">擇日</p>
+  <h1>좋은 날을<br>골라드립니다</h1>
+  <p class="sub">이사·계약·개업·면접·결혼. 생년월일을 넣으면 앞으로 석 달 중 내 사주에 맞는 날이 나옵니다.</p>
 </header>
 
-<section class="panel" id="form">
-  <div class="field">
-    <label id="lab-cal">달력</label>
-    <div class="seg" role="group" aria-labelledby="lab-cal">
-      <button type="button" id="cal-solar" aria-pressed="true">양력</button>
-      <button type="button" id="cal-lunar" aria-pressed="false">음력</button>
-    </div>
+<div class="ask" id="ask" style="margin-top:0">
+  <h3>무슨 일로 날을 고르시나요</h3>
+  <p>목적마다 좋은 날이 다릅니다. 계약과 수술은 보는 기준이 정반대입니다.</p>
+  <div class="fd">
+    <label for="purpose">목적</label>
+    <select id="purpose"></select>
   </div>
-  <div class="field">
+  <div class="fd">
     <label for="y">생년월일</label>
-    <div class="row three">
+    <div class="r3">
       <input id="y" type="number" inputmode="numeric" placeholder="1990" min="1900" max="2100">
       <input id="m" type="number" inputmode="numeric" placeholder="10" min="1" max="12">
       <input id="d" type="number" inputmode="numeric" placeholder="10" min="1" max="31">
     </div>
-    <label class="check" id="leap-wrap" style="margin-top:12px;display:none">
-      <input type="checkbox" id="leap"> 윤달에 태어났습니다
-    </label>
   </div>
-  <div class="field">
+  <div class="fd">
     <label for="hh">태어난 시각</label>
-    <div class="row two">
+    <div class="r2">
       <input id="hh" type="number" inputmode="numeric" placeholder="14" min="0" max="23">
       <input id="mi" type="number" inputmode="numeric" placeholder="30" min="0" max="59">
     </div>
-    <label class="check" style="margin-top:12px"><input type="checkbox" id="nohour"> 시간을 모릅니다</label>
+    <label class="chk"><input type="checkbox" id="nohour"> 시간을 모릅니다</label>
   </div>
-  <div class="field">
-    <label id="lab-sex">성별</label>
-    <div class="seg" role="group" aria-labelledby="lab-sex">
-      <button type="button" id="sx-m" aria-pressed="true">남자</button>
-      <button type="button" id="sx-f" aria-pressed="false">여자</button>
-    </div>
-  </div>
-  <div class="field">
+  <div class="fd">
     <label for="city">태어난 곳</label>
     <select id="city"></select>
   </div>
-  <div class="field">
-    <label for="job">지금 하는 일</label>
-    <select id="job"></select>
+  <div class="fd">
+    <label for="range">언제까지 보시겠어요</label>
+    <select id="range">
+      <option value="30">앞으로 한 달</option>
+      <option value="90" selected>앞으로 석 달</option>
+      <option value="180">앞으로 여섯 달</option>
+    </select>
   </div>
-  <button type="button" class="go" id="submit">내 인연 보기</button>
+  <button type="button" class="go" id="submit">좋은 날 찾기</button>
   <p class="err" id="err"></p>
-</section>
-
-<section id="result" aria-live="polite">
-  <div class="stats" id="stats"></div>
-  <div class="hook" id="hook"></div>
-  <div id="qlist"></div>
-  <div class="compat" id="compat">
-    <h3>상대와의 궁합<span class="free-tag">무료</span></h3>
-    <p class="cs">상대의 생년월일을 넣으면 두 사람의 명식을 견줘 봅니다. 앞의 13번 문항에서 말씀드린 두 가지를 여기서 바로 확인할 수 있습니다.</p>
-    <div class="field">
-      <label for="c-name">상대 이름 또는 호칭</label>
-      <input id="c-name" type="text" placeholder="예: 그 사람">
-    </div>
-    <div class="field">
-      <label for="c-y">생년월일</label>
-      <div class="row three">
-        <input id="c-y" type="number" inputmode="numeric" placeholder="1990" min="1900" max="2100">
-        <input id="c-m" type="number" inputmode="numeric" placeholder="11" min="1" max="12">
-        <input id="c-d" type="number" inputmode="numeric" placeholder="18" min="1" max="31">
-      </div>
-    </div>
-    <div class="field">
-      <label for="c-hh">태어난 시각</label>
-      <div class="row two">
-        <input id="c-hh" type="number" inputmode="numeric" placeholder="7" min="0" max="23">
-        <input id="c-mi" type="number" inputmode="numeric" placeholder="30" min="0" max="59">
-      </div>
-      <label class="check" style="margin-top:12px"><input type="checkbox" id="c-nohour"> 시간을 모릅니다</label>
-    </div>
-    <div class="field">
-      <label id="c-lab-sex">성별</label>
-      <div class="seg" role="group" aria-labelledby="c-lab-sex">
-        <button type="button" id="c-sx-m" aria-pressed="true">남자</button>
-        <button type="button" id="c-sx-f" aria-pressed="false">여자</button>
-      </div>
-    </div>
-    <button class="go" id="c-submit">궁합 보기</button>
-    <p class="err" id="c-err"></p>
-    <div id="cresult" style="display:none"></div>
-  </div>
-
-  <div class="tease" id="tease">
-    <h4 id="tease-h"></h4>
-    <ul id="tease-list"></ul>
-    <p class="price">24,000<small>원</small></p>
-    <p class="note">한 번 결제하면 계속 볼 수 있고, PDF로 저장됩니다.</p>
-      <div class="buy">
-        <label for="buy-email">이메일 (영수증과 재열람에 사용합니다)</label>
-        <input id="buy-email" type="email" inputmode="email" placeholder="name@example.com" autocomplete="email">
-        <label class="agree">
-          <input type="checkbox" id="buy-agree">
-          <span>결제 후 잠긴 내용을 열람하면 청약철회가 제한된다는 점에 동의합니다.
-          <a href="/terms.html" target="_blank" rel="noopener">환불 규정</a></span>
-        </label>
-        <details class="gift">
-          <summary>선물로 보내기</summary>
-          <input id="gift-email" type="email" inputmode="email" placeholder="받는 분 이메일">
-          <textarea id="gift-msg" placeholder="함께 보낼 한마디 (선택)"></textarea>
-          <p>받는 분께 열람 링크가 전송됩니다. 비워두시면 본인이 보는 것으로 처리됩니다.</p>
-        </details>
-      </div>
-    <div class="method">
-    <b>어떤 방법으로 읽는지</b>
-    <p class="sh" id="method-short"></p>
-    <details><summary>방법론 전체 보기</summary>
-    <div id="method-full" style="margin-top:10px"></div>
-    </details>
-    </div>
-    <button type="button" class="unlock" id="unlock">서른 가지 전부 열기</button>
-  </div>
-  <p class="disc" id="disc"></p>
-    <div class="more">
-      <h4>다른 편도 보시겠어요</h4>
-      <p class="ms">생년월일은 한 번만 넣으면 세 편이 함께 씁니다.</p>
-      <a href="/index.html">
-        <span class="dot" style="background:#6E7BB8"></span>
-        <span class="tx"><span class="tt">평생사주</span><span class="dd">나라는 사람부터 돈·일·인연·시기까지 서른 가지</span></span>
-        <span class="pr">29,000원</span>
-      </a>
-      <a href="/wealth.html">
-        <span class="dot" style="background:#B98BD4"></span>
-        <span class="tx"><span class="tt">재물사주</span><span class="dd">내 돈 그릇과 새는 구멍, 터지는 시기 서른 가지</span></span>
-        <span class="pr">24,000원</span>
-      </a>
-    </div>
-  <button class="again" id="again">다시 입력하기</button>
-</section>
-
 </div>
 
-<script src="https://js.tosspayments.com/v2/standard"></script>
-<script>
-  window.TOSS_CLIENT_KEY = "test_ck_REPLACE_ME";
-  // ── 테스트 모드 ──────────────────────────────
-  // true 면 결제 없이 모든 내용이 열립니다.
-  // 실제 판매 전에 반드시 false 로 바꾸세요.
-  window.TEST_MODE = true;
+<section id="mine"></section>
+
+<h2>택일이 무엇인가요</h2>
+<p>택일(擇日)은 중요한 일을 할 날을 고르는 것입니다. 예로부터 혼례, 이사, 개업, 상량에 날을 받아 썼습니다. 그날의 간지가 내 사주와 어떤 관계를 맺는지를 보고 고릅니다.</p>
+<p>핵심은 <strong>같은 날이라도 사람마다 다르다</strong>는 점입니다. 달력에 적힌 '손 없는 날'은 모두에게 똑같이 적용되지만, 사주로 보는 택일은 내 일간과 그날의 간지가 맺는 관계를 봅니다. 그래서 어떤 사람에게 좋은 날이 다른 사람에게는 보통인 날이 됩니다.</p>
+
+<h2>목적마다 좋은 날이 다릅니다</h2>
+<p>계약과 수술은 보는 기준이 정반대입니다. 계약은 정(正)이 붙은 기운, 즉 정재·정관·정인이 서는 날이 좋습니다. 조건을 끝까지 읽을 수 있는 차분한 날이어야 하기 때문입니다. 반면 수술은 압박을 뜻하는 편관이 센 날을 피하고, 회복을 돕는 인성과 식신이 서는 날을 고릅니다.</p>
+<table>
+  <tr><th>목적</th><th>좋은 기운</th><th>피할 기운</th></tr>
+  <tr><td>계약·서명</td><td>정재·정관·정인</td><td>겁재·상관</td></tr>
+  <tr><td>개업·오픈</td><td>편재·식신·정관</td><td>겁재·편관</td></tr>
+  <tr><td>이사·이전</td><td>정인·정재·식신</td><td>편관·겁재</td></tr>
+  <tr><td>면접·시험</td><td>정인·정관·편인</td><td>상관·겁재</td></tr>
+  <tr><td>결혼·상견례</td><td>정관·정재·정인</td><td>상관·편관</td></tr>
+  <tr><td>수술·치료</td><td>정인·식신</td><td>편관·상관·겁재</td></tr>
+  <tr><td>투자·큰 지출</td><td>정재·편재·정관</td><td>겁재·상관</td></tr>
+</table>
+
+<h2>어떻게 고르나요</h2>
+<p>네 가지를 함께 봅니다.</p>
+<ul>
+  <li><strong>목적에 맞는 십신</strong> — 그날의 천간과 지지가 목적이 원하는 기운인지</li>
+  <li><strong>용신과 기신</strong> — 내게 필요한 기운이 들어오는 날인지, 이미 넘치는 기운이 더해지는 날인지</li>
+  <li><strong>일지와의 관계</strong> — 내 일지와 합을 이루면 수월하고, 충하면 마음이 들썩입니다</li>
+  <li><strong>공망</strong> — 비어 있는 자리에 걸린 날은 애써도 손에 남지 않습니다</li>
+</ul>
+<p>이 네 가지를 점수로 합산해 앞으로 석 달치 날을 모두 계산한 뒤, 가장 높은 날과 가장 낮은 날을 추립니다.</p>
+
+<h2>자주 묻는 질문</h2>
+<dl class="faq">
+  <dt>손 없는 날과 다른가요?</dt>
+  <dd>다릅니다. 손 없는 날은 음력 날짜로 모두에게 똑같이 적용되는 반면, 사주 택일은 내 생년월일을 기준으로 사람마다 다르게 나옵니다. 둘을 함께 보셔도 됩니다.</dd>
+  <dt>좋은 날이 없으면 어떻게 하나요?</dt>
+  <dd>기간을 늘려 보세요. 석 달에서 여섯 달로 늘리면 선택지가 넓어집니다. 그래도 일정이 정해져 있다면 피할 날만 비껴가도 충분합니다.</dd>
+  <dt>시간까지 골라야 하나요?</dt>
+  <dd>날을 고르는 것이 먼저이고, 시간은 그다음입니다. 하루 중 좋은 시간대는 오늘의 일진 페이지에서 확인하실 수 있습니다.</dd>
+  <dt>태어난 시각을 모르면 안 되나요?</dt>
+  <dd>괜찮습니다. 택일은 일간을 기준으로 하므로 시각을 몰라도 결과에 큰 차이가 없습니다.</dd>
+  <dt>꼭 좋은 날에 해야 하나요?</dt>
+  <dd>그렇지 않습니다. 택일은 보험에 가깝습니다. 되돌리기 어려운 일일수록 날을 보는 편이 마음이 편하고, 나머지는 일정이 우선입니다.</dd>
+</dl>
+
+<div class="cta">
+  <h4>더 깊이 보시려면</h4>
+  <a href="/tools.html"><span class="dot" style="background:#2F7A63"></span>
+    <span class="tt">결정 상담<span class="dd">동업·이직·창업, 지금 결정해도 될지 묻기</span></span>
+    <span class="pr">무료</span></a>
+  <a href="/index.html"><span class="dot" style="background:#9A7B3F"></span>
+    <span class="tt">평생사주<span class="dd">나는 어떤 사람이고 언제 흐름이 바뀌는지 서른 가지</span></span>
+    <span class="pr">29,000원</span></a>
+  <a href="/today.html"><span class="dot" style="background:#7A6436"></span>
+    <span class="tt">오늘의 일진<span class="dd">오늘은 무슨 날이고 좋은 시간대는 언제인지</span></span>
+    <span class="pr">무료</span></a>
+</div>
+
+<p class="foot"><a href="/">처음으로</a> · <a href="/terms.html">이용 안내</a></p>
+</div>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"택일이 무엇인가요?","acceptedAnswer":{"@type":"Answer","text":"택일은 중요한 일을 할 날을 고르는 것입니다. 그날의 간지가 내 사주와 어떤 관계를 맺는지를 보고 고릅니다."}},
+{"@type":"Question","name":"손 없는 날과 다른가요?","acceptedAnswer":{"@type":"Answer","text":"다릅니다. 손 없는 날은 음력 날짜로 모두에게 똑같이 적용되는 반면, 사주 택일은 생년월일을 기준으로 사람마다 다르게 나옵니다."}},
+{"@type":"Question","name":"태어난 시각을 모르면 안 되나요?","acceptedAnswer":{"@type":"Answer","text":"괜찮습니다. 택일은 일간을 기준으로 하므로 시각을 몰라도 결과에 큰 차이가 없습니다."}}]}
 </script>
-<script src="/pay.js"></script>
+
 <script>
 const JEOL = {"base":"1899-01-01T00:00","tz":"UTC","names":["\uacbd\uce69","\ub300\uc124","\ub9dd\uc885","\ubc31\ub85c","\uc18c\uc11c","\uc18c\ud55c","\uc785\ub3d9","\uc785\ucd94","\uc785\ucd98","\uc785\ud558","\uccad\uba85","\ud55c\ub85c"],"order":[10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0,10,9,2,4,7,3,11,6,1,5,8,0],"deltas":[135369,44282,44922,45269,45218,44784,44096,43347,42738,42419,42468,42870,43531,44282,44924,45271,45221,44786,44096,43347,42736,42417,42467,42871,43533,44287,44926,45271,45218,44784,44097,43348,42738,42419,42466,42870,43530,44281,44921,45267,45215,44785,44098,43353,42743,42423,42467,42868,43527,44280,44921,45270,45219,44786,44100,43351,42742,42422,42467,42868,43527,44280,44922,45271,45220,44786,44098,43349,42740,42422,42469,42870,43529,44279,44920,45266,45217,44785,44098,43350,42741,42422,42471,42872,43531,44282,44920,45267,45216,44784,44099,43352,42742,42422,42468,42868,43528,44279,44919,45266,45217,44786,44101,43353,42743,42422,42466,42867,43526,44279,44920,45269,45219,44785,44099,43351,42742,42421,42468,42868,43529,44281,44923,45270,45219,44784,44096,43350,42742,42423,42469,42870,43526,44277,44917,45264,45216,44785,44099,43352,42744,42424,42469,42869,43526,44275,44918,45267,45220,44788,44102,43352,42741,42419,42466,42868,43527,44279,44921,45269,45220,44789,44101,43352,42740,42419,42465,42866,43527,44279,44919,45265,45217,44787,44101,43354,42743,42422,42466,42867,43526,44278,44920,45267,45218,44788,44102,43356,42746,42423,42465,42863,43521,44274,44917,45268,45220,44789,44104,43357,42746,42424,42466,42863,43521,44272,44916,45268,45221,44790,44103,43354,42744,42423,42469,42867,43525,44276,44917,45267,45220,44790,44102,43355,42744,42423,42469,42868,43524,44273,44913,45261,45216,44788,44104,43359,42747,42425,42468,42867,43523,44273,44915,45264,45217,44790,44105,43359,42746,42423,42465,42865,43524,44276,44920,45268,45219,44789,44102,43356,42745,42424,42466,42865,43524,44275,44918,45265,45217,44786,44101,43354,42746,42426,42469,42868,43524,44275,44918,45267,45219,44789,44103,43356,42746,42423,42466,42864,43522,44272,44917,45267,45223,44792,44106,43357,42745,42420,42465,42862,43521,44273,44916,45268,45222,44794,44106,43357,42744,42420,42464,42863,43523,44275,44919,45268,45222,44793,44107,43359,42746,42422,42464,42862,43518,44270,44914,45264,45218,44792,44109,43363,42751,42426,42465,42860,43516,44267,44912,45265,45222,44794,44109,43362,42749,42425,42465,42861,43518,44269,44913,45267,45224,44794,44108,43360,42747,42425,42467,42863,43519,44269,44911,45261,45217,44791,44107,43360,42749,42426,42469,42866,43520,44270,44911,45262,45217,44792,44109,43362,42751,42425,42465,42861,43518,44270,44912,45264,45219,44792,44110,43363,42750,42425,42464,42860,43517,44269,44913,45264,45220,44791,44107,43360,42748,42425,42466,42862,43520,44271,44916,45267,45221,44792,44106,43359,42748,42425,42468,42862,43518,44267,44911,45263,45219,44792,44109,43362,42749,42426,42467,42861,43516,44266,44910,45264,45222,44796,44112,43362,42747,42422,42462,42860,43518,44270,44914,45267,45225,44798,44112,43362,42747,42422,42461,42859,43517,44270,44912,45263,45220,44794,44111,43364,42751,42425,42464,42859,43515,44266,44912,45265,45221,44795,44113,43367,42754,42426,42462,42856,43511,44264,44911,45267,45225,44798,44115,43367,42753,42427,42463,42857,43511,44261,44908,45264,45224,44797,44113,43365,42751,42426,42466,42860,43515,44265,44909,45264,45223,44798,44114,43366,42752,42426,42466,42861,43515,44263,44906,45259,45218,44796,44116,43369,42756,42428,42465,42859,43512,44262,44906,45260,45220,44796,44116,43368,42754,42426,42464,42857,43514,44266,44911,45265,45223,44797,44113,43366,42753,42426,42465,42859,43514,44265,44909,45261,45218,44793,44111,43365,42754,42428,42468,42861,43514,44263,44907,45262,45221,44796,44113,43366,42753,42426,42464,42858,43512,44263,44908,45265,45225,44800,44116,43367,42752,42424,42462,42856,43511,44263,44909,45263,45222,44799,44115,43367,42751,42423,42462,42856,43513,44265,44910,45265,45223,44799,44117,43369,42753,42426,42462,42854,43509,44261,44906,45262,45222,44799,44118,43372,42758,42428,42463,42854,43506,44256,44904,45261,45224,44800,44118,43371,42755,42428,42463,42854,43508,44259,44907,45264,45226,44803,44118,43370,42753,42427,42464,42856,43511,44259,44904,45259,45220,44798,44117,43371,42756,42428,42466,42858,43510,44259,44903,45258,45220,44799,44119,43374,42757,42428,42462,42853,43508,44259,44906,45262,45224,44802,44120,43373,42758,42427,42462,42852,43507,44259,44906,45262,45222,44799,44117,43370,42756,42428,42465,42855,43509,44259,44907,45263,45224,44800,44118,43370,42756,42428,42465,42856,43507,44257,44903,45262,45223,44802,44120,43373,42758,42428,42464,42855,43506,44256,44901,45260,45224,44804,44122,43372,42755,42425,42461,42853,43508,44259,44906,45264,45227,44805,44124,43373,42756,42425,42459,42853,43507,44259,44905,45261,45221,44801,44122,43375,42760,42429,42462,42852,43505,44256,44901,45260,45223,44801,44123,43377,42762,42429,42462,42849,43502,44253,44903,45263,45228,44806,44124,43376,42761,42429,42463,42851,43502,44253,44901,45260,45224,44804,44122,43373,42758,42429,42464,42855,43506,44255,44900,45260,45223,44803,44123,43376,42758,42429,42464,42853,43506,44254,44899,45257,45222,44803,44125,43378,42763,42430,42463,42851,43503,44253,44898,45257,45222,44803,44123,43376,42760,42429,42461,42851,43503,44255,44903,45263,45225,44805,44122,43375,42759,42429,42462,42852,43504,44255,44902,45260,45222,44801,44122,43374,42760,42431,42464,42852,43504,44252,44898,45259,45223,44804,44124,43376,42759,42428,42460,42850,43501,44252,44901,45262,45229,44810,44129,43378,42759,42426,42458,42848,43501,44252,44901,45261,45226,44806,44127,43377,42760,42426,42459,42849,43501,44252,44901,45261,45225,44806,44128,43381,42762,42430,42460,42847,43498,44249,44898,45259,45226,44808,44130,43383,42767,42432,42462,42847,43496,44245,44895,45258,45225,44808,44129,43381,42763,42431,42462,42849,43498,44249,44896,45260,45227,44810,44130,43381,42762,42430,42462,42851,43502,44250,44896,45256,45222,44806,44128,43382,42765,42432,42464,42851,43501,44250,44894,45254,45221,44804,44129,43383,42766,42431,42461,42848,43498,44249,44898,45260,45226,44809,44130,43383,42765,42431,42460,42847,43499,44250,44899,45260,45225,44805,44125,43379,42763,42432,42462,42850,43500,44250,44898,45259,45225,44806,44127,43378,42763,42431,42463,42850,43498,44247,44896,45259,45227,44810,44130,43382,42764,42431,42461,42847,43497,44247,44895,45257,45227,44810,44131,43381,42762,42427,42458,42846,43497,44249,44898,45260,45229,44812,44133,43382,42763,42427,42457,42844,43498,44249,44897,45259,45225,44809,44132,43384,42767,42432,42460,42844,43494,44245,44894,45256,45225,44809,44132,43386,42768,42432,42459,42842,43490,44242,44893,45260,45230,44815,44136,43386,42766,42431,42460,42844,43492,44243,44893,45258,45227,44812,44133,43384,42765,42432,42461,42847,43496,44244,44891,45255,45224,44810,44133,43386,42768,42432,42461,42845,43494,44243,44890,45255,45225,44812,44136,43389,42771,42434,42460,42844,43493,44242,44891,45255,45224,44810,44134,43387,42768,42432,42460,42844,43493,44244,44893,45258,45227,44811,44133,43386,42767,42432,42461,42845,43495,44245,44893,45257,45226,44810,44132,43385,42769,42434,42463,42847,43494,44242,44891,45255,45224,44811,44134,43387,42767,42431,42459,42843,43492,44242,44893,45258,45231,44817,44138,43388,42767,42429,42457,42842,43492,44244,44895,45259,45229,44813,44137,43387,42768,42430,42458,42842,43492,44244,44893,45257,45226,44813,44136,43390,42770,42433,42459,42840,43488,44238,44891,45257,45229,44816,44140,43392,42773,42436,42460,42841,43487,44236,44888,45256,45229,44816,44138,43390,42769,42434,42459,42843,43489,44238,44889,45255,45229,44816,44139,43390,42769,42432,42460,42843,43492,44241,44889,45253,45225,44814,44139,43392,42772,42434,42461,42843,43491,44239,44888,45251,45223,44812,44138,43393,42772,42434,42457,42840,43488,44238,44889,45256,45228,44816,44141,43392,42772,42433,42458,42840,43487,44240,44891,45257,45229,44813,44136,43389,42771,42434,42460,42842,43489,44239,44889,45255,45227,44813,44136,43389,42771,42434,42460,42842,43486,44236,44886,45255,45229,44818,44142,43394,42772,42433,42458,42840,43487,44235,44887,45255,45229,44819,44141,43393,42770,42431,42455,42839,43487,44238,44888,45255,45229,44818,44143,43393,42772,42432,42456,42837,43487,44237,44888,45255,45227,44817,44142,43396,42776,42437,42459,42838,43484,44234,44886,45253,45226,44816,44141,43396,42776,42436,42459,42837,43482,44231,44885,45254,45232,44820,44145,43396,42774,42435,42458,42839,43485,44234,44886,45255,45230,44818,44143,43394,42773,42435,42459,42842,43487,44236,44885,45252,45225,44816,44142,43396,42774,42436,42459,42839,43485,44233,44883,45252,45228,44819,44146,43399,42777,42436,42458,42838,43483,44234,44885,45254,45230,44818,44143,43396,42774,42435,42458,42837,43485,44234,44887,45255,45229,44818,44142,43395,42773,42435,42458,42839,43484,44234,44886,45254,45229,44819,44143,43396,42775,42436,42459,42840,43485,44232,44884,45253,45229,44819,44145,43397,42774,42433,42455,42836,43481,44232,44884,45254,45232,44824,44149,43398,42774,42432,42453,42834,43481,44233,44888,45256,45231,44822,44147,43399,42775,42434,42456,42835,43481,44232,44885,45254,45228,44819,44146,43400,42778,42437,42457,42833,43476,44226,44880,45252,45231,44823,44150,43403,42781,42439,42457,42834,43477,44226,44879,45253,45232,44824,44149,43399,42778,42436,42458,42836,43479,44228,44880,45250,45229,44822,44149,43400,42777,42436,42457,42837,43481,44229,44880,45248,45227,44820,44149,43403,42780,42439,42459,42837,43481,44229,44879,45249,45226,44818,44148,43403,42780,42438,42456,42833,43478,44228,44881,45251,45230,44821,44149,43401,42779,42437,42457,42834,43478,44229,44884,45254,45231,44821,44146,43399,42777,42438,42458,42837,43481,44230,44882,45252,45230,44820,44146,43399,42777,42436,42458,42835,43478,44225,44878,45251,45232,44826,44152,43403,42779,42436,42455,42833,43477,44227,44881,45253,45234,44827,44153,43402,42778,42433,42453,42831,43477,44229,44882,45253,45232,44825,44152,43404,42779,42435,42453,42831,43476,44226,44879,45252,45231,44824,44154,43407,42784,42439,42457,42831,43474,44223,44878,45251,45231,44825,44153,43406,42783,42439,42456,42830,43473,44221,44876,45250,45233,44828,44155,43407,42781,42438,42456,42832,43475,44223,44878,45250,45232,44826,44154,43405,42782,42438,42457,42835,43478,44225,44878,45248,45228,44822,44152,43407,42783,42439,42457,42832,43474,44222,44874,45247,45229,44825,44155,43409,42786,42440,42456,42831,43472,44223,44877,45251,45232,44826,44153,43405,42783,42438,42456,42832,43474,44224,44879,45251,45231,44824,44151,43404,42781,42438,42457,42832,43475,44222,44876,45248,45230,44825,44154,43406,42782,42440,42457,42833,43475,44223,44875,45249,45232,44826,44155,43407,42782,42436,42453,42829,43473,44222,44876,45250,45232,44830,44157,43408,42782,42435,42452,42827,43472,44222,44879,45252,45232,44828,44157,43408,42784,42437,42454,42829,43472,44222,44878,45251,45231,44826,44155,43409,42786,42440,42455,42827,43467,44216,44872,45248,45233,44830,44159,43412,42787,42441,42455,42828,43467,44216,44873,45249,45236,44832,44159,43410,42783,42439,42455,42830,43471,44219,44874,45248,45232,44830,44158,43410,42784,42438,42455,42829,43472,44218,44871,45245,45230,44827,44159,43414,42788,42441,42456,42829,43471,44219,44872,45247,45231,44828,44160,43413,42788,42440,42454,42826,43468,44218,44873,45249,45232,44830,44159,43412,42786,42440,42454,42827,43468,44217,44875,45251,45233,44829,44157,43410,42786,42440,42457,42831,43471,44219,44874,45250,45233,44828,44158,43410,42785,42441,42455,42828,43467,44215,44870,45246,45234,44832,44163,43414,42787,42439,42453,42826,43467,44215,44872,45250,45236,44834,44163,43414,42786,42437,42451,42825,43468,44218,44875,45250,45234,44831,44162,43414,42787,42439,42453,42824,43466,44214,44870,45246,45231,44831,44162,43416,42792,42444,42456,42825,43464,44212,44869,45247,45234,44832,44164,43415,42790,42442,42455,42825,43464,44211,44869,45246,45234,44834,44164,43415,42788,42440,42454,42826,43466,44213,44869,45246,45232,44831,44163,43415,42789,42441,42455,42828,43469,44216,44870,45246,45230,44830,44162,43415,42791,42442,42454,42825,43464,44212,44867,45244,45230,44832,44164,43418,42792,42442,42454,42824,43462,44212,44869,45248,45235,44833,44163,43415,42789,42441,42453,42825,43465,44214,44872,45249,45235,44832,44161,43414,42788,42440,42454,42825,43465,44212,44867,45244,45233,44832,44164,43417,42790,42442,42455,42824,43464,44211,44867,45246,45235,44837,44167,43419,42789,42438,42451,42821,43462,44212,44869,45248,45236,44837,44168,43420,42790,42439,42449,42820,43461,44211,44869,45247,45235,44834,44167,43421,42792,42443,42452,42822,43461,44211,44869,45247,45235,44835,44166,43421,42795,42445,42454,42821,43457,44205,44863,45245,45234,44837,44170,43422,42795,42445,42455,42822,43458,44205,44862,45245,45237,44838,44170,43421,42792,42442,42454,42824,43463,44210,44866,45246,45234,44835,44169,43420,42793,42442,42454,42824,43463,44208,44863,45240,45230,44833,44168,43422,42797,42445,42455,42824,43460,44209,44864,45243,45233,44835,44169,43422,42795,42443,42453,42821,43459,44209,44867,45247,45235,44835,44168,43420,42793,42442,42453,42821,43460,44208,44866,45246,45234,44834,44166,43419,42792,42443,42454,42824,43462,44209,44867,45246,45236,44837,44167,43419,42793,42442,42453,42820,43458,44206,44863,45244,45236,44839,44172,43424,42793,42441,42449,42818,43457,44205,44863,45246,45238,44841,44173,43423,42793,42440,42448,42817,43458,44208,44867,45248,45238,44839,44172,43424,42795,42442,42450,42817,43454,44203,44862,45242,45233,44838,44172,43426,42799,42447,42453,42818,43453,44200,44860,45243,45236,44841,44175,43426,42798,42444,42453,42817,43455,44201,44860,45244,45237,44842,44175,43426,42796,42443,42452,42818,43456,44202,44860,45241,45233,44838,44172,43427,42797,42445,42454,42821,43458,44204,44862,45242,45233,44838,44173,43427,42799,42447,42453,42817,43454,44201,44860,45241,45234,44839,44174,43429,42800,42447,42452,42817,43453,44200,44860,45243,45237,44840,44173,43425,42798,42444,42453,42819,43456,44204,44863,45246,45238,44840,44173,43424,42796,42444,42454,42820,43456,44201,44859,45241,45233,44839,44174,43427,42798,42446,42453,42820,43454,44201,44858,45242,45236,44843,44178,43429,42797,42442,42449,42815,43454,44203,44863,45245,45239,44844,44178,43429,42798,42442,42448,42814,43452,44202,44861,45243,45235,44841,44175,43429,42800,42446,42452,42816,43451,44201,44860,45244,45237,44842,44176,43430,42801,42448,42452,42815,43448,44196,44856,45242,45238,44844,44180,43431,42801,42447,42452,42815,43449,44195,44855,45240,45238,44845,44179,43430,42799,42444,42451,42816,43453,44200,44859,45242,45237,44843,44179,43430,42800,42445,42451,42816,43452,44199,44855,45238,45231,44840,44178,43433,42804,42449,42452,42815,43450,44195,44855,45239,45234,44842,44179,43433,42802,42446,42451,42813,43449,44197,44859,45244,45239,44843,44178,43431,42800,42446,42451,42815,43449,44197,44857,45241,45235,44842,44175,43429,42800,42447,42453,42817,43451,44197,44857,45241,45237,44844,44179,43431,42801,42446,42450,42813]};
 const LUNAR = {"base":"1899-01-01","rows":[[11,1898,12,0],[29,1899,1,0],[30,1899,2,0],[29,1899,3,0],[30,1899,4,0],[29,1899,5,0],[30,1899,6,0],[29,1899,7,0],[30,1899,8,0],[30,1899,9,0],[29,1899,10,0],[30,1899,11,0],[29,1899,12,0],[30,1900,1,0],[29,1900,2,0],[30,1900,3,0],[29,1900,4,0],[29,1900,5,0],[30,1900,6,0],[29,1900,7,0],[30,1900,8,0],[30,1900,8,1],[29,1900,9,0],[30,1900,10,0],[30,1900,11,0],[29,1900,12,0],[30,1901,1,0],[29,1901,2,0],[30,1901,3,0],[29,1901,4,0],[29,1901,5,0],[30,1901,6,0],[29,1901,7,0],[30,1901,8,0],[29,1901,9,0],[30,1901,10,0],[30,1901,11,0],[30,1901,12,0],[29,1902,1,0],[30,1902,2,0],[29,1902,3,0],[30,1902,4,0],[29,1902,5,0],[29,1902,6,0],[30,1902,7,0],[29,1902,8,0],[30,1902,9,0],[29,1902,10,0],[30,1902,11,0],[30,1902,12,0],[30,1903,1,0],[29,1903,2,0],[30,1903,3,0],[29,1903,4,0],[30,1903,5,0],[29,1903,5,1],[29,1903,6,0],[30,1903,7,0],[29,1903,8,0],[30,1903,9,0],[29,1903,10,0],[30,1903,11,0],[30,1903,12,0],[29,1904,1,0],[30,1904,2,0],[30,1904,3,0],[29,1904,4,0],[30,1904,5,0],[29,1904,6,0],[29,1904,7,0],[30,1904,8,0],[29,1904,9,0],[30,1904,10,0],[29,1904,11,0],[30,1904,12,0],[29,1905,1,0],[30,1905,2,0],[30,1905,3,0],[30,1905,4,0],[29,1905,5,0],[30,1905,6,0],[29,1905,7,0],[29,1905,8,0],[30,1905,9,0],[29,1905,10,0],[30,1905,11,0],[29,1905,12,0],[30,1906,1,0],[29,1906,2,0],[30,1906,3,0],[30,1906,4,0],[29,1906,4,1],[30,1906,5,0],[29,1906,6,0],[30,1906,7,0],[29,1906,8,0],[30,1906,9,0],[29,1906,10,0],[30,1906,11,0],[29,1906,12,0],[30,1907,1,0],[29,1907,2,0],[30,1907,3,0],[29,1907,4,0],[30,1907,5,0],[30,1907,6,0],[29,1907,7,0],[30,1907,8,0],[29,1907,9,0],[30,1907,10,0],[29,1907,11,0],[30,1907,12,0],[29,1908,1,0],[30,1908,2,0],[29,1908,3,0],[30,1908,4,0],[29,1908,5,0],[30,1908,6,0],[29,1908,7,0],[30,1908,8,0],[29,1908,9,0],[30,1908,10,0],[30,1908,11,0],[29,1908,12,0],[30,1909,1,0],[29,1909,2,0],[30,1909,2,1],[29,1909,3,0],[29,1909,4,0],[30,1909,5,0],[29,1909,6,0],[30,1909,7,0],[30,1909,8,0],[29,1909,9,0],[30,1909,10,0],[30,1909,11,0],[29,1909,12,0],[30,1910,1,0],[29,1910,2,0],[30,1910,3,0],[29,1910,4,0],[29,1910,5,0],[30,1910,6,0],[29,1910,7,0],[30,1910,8,0],[29,1910,9,0],[30,1910,10,0],[30,1910,11,0],[30,1910,12,0],[29,1911,1,0],[30,1911,2,0],[29,1911,3,0],[30,1911,4,0],[29,1911,5,0],[29,1911,6,0],[30,1911,6,1],[29,1911,7,0],[29,1911,8,0],[30,1911,9,0],[30,1911,10,0],[30,1911,11,0],[29,1911,12,0],[30,1912,1,0],[30,1912,2,0],[29,1912,3,0],[30,1912,4,0],[29,1912,5,0],[29,1912,6,0],[30,1912,7,0],[29,1912,8,0],[29,1912,9,0],[30,1912,10,0],[30,1912,11,0],[29,1912,12,0],[30,1913,1,0],[30,1913,2,0],[30,1913,3,0],[29,1913,4,0],[30,1913,5,0],[29,1913,6,0],[29,1913,7,0],[30,1913,8,0],[29,1913,9,0],[29,1913,10,0],[30,1913,11,0],[29,1913,12,0],[30,1914,1,0],[30,1914,2,0],[30,1914,3,0],[29,1914,4,0],[30,1914,5,0],[30,1914,5,1],[29,1914,6,0],[29,1914,7,0],[30,1914,8,0],[29,1914,9,0],[30,1914,10,0],[29,1914,11,0],[29,1914,12,0],[30,1915,1,0],[30,1915,2,0],[29,1915,3,0],[30,1915,4,0],[30,1915,5,0],[29,1915,6,0],[30,1915,7,0],[29,1915,8,0],[30,1915,9,0],[29,1915,10,0],[30,1915,11,0],[29,1915,12,0],[30,1916,1,0],[29,1916,2,0],[30,1916,3,0],[29,1916,4,0],[30,1916,5,0],[29,1916,6,0],[30,1916,7,0],[30,1916,8,0],[29,1916,9,0],[30,1916,10,0],[29,1916,11,0],[30,1916,12,0],[29,1917,1,0],[30,1917,2,0],[29,1917,2,1],[29,1917,3,0],[30,1917,4,0],[29,1917,5,0],[30,1917,6,0],[30,1917,7,0],[29,1917,8,0],[30,1917,9,0],[30,1917,10,0],[29,1917,11,0],[30,1917,12,0],[29,1918,1,0],[30,1918,2,0],[29,1918,3,0],[29,1918,4,0],[30,1918,5,0],[29,1918,6,0],[30,1918,7,0],[29,1918,8,0],[30,1918,9,0],[30,1918,10,0],[30,1918,11,0],[29,1918,12,0],[30,1919,1,0],[29,1919,2,0],[30,1919,3,0],[29,1919,4,0],[29,1919,5,0],[30,1919,6,0],[29,1919,7,0],[30,1919,7,1],[29,1919,8,0],[30,1919,9,0],[30,1919,10,0],[29,1919,11,0],[30,1919,12,0],[30,1920,1,0],[29,1920,2,0],[30,1920,3,0],[29,1920,4,0],[29,1920,5,0],[30,1920,6,0],[29,1920,7,0],[29,1920,8,0],[30,1920,9,0],[30,1920,10,0],[29,1920,11,0],[30,1920,12,0],[30,1921,1,0],[30,1921,2,0],[29,1921,3,0],[30,1921,4,0],[29,1921,5,0],[29,1921,6,0],[30,1921,7,0],[29,1921,8,0],[29,1921,9,0],[30,1921,10,0],[29,1921,11,0],[30,1921,12,0],[30,1922,1,0],[30,1922,2,0],[29,1922,3,0],[30,1922,4,0],[30,1922,5,0],[29,1922,5,1],[29,1922,6,0],[30,1922,7,0],[29,1922,8,0],[29,1922,9,0],[30,1922,10,0],[29,1922,11,0],[30,1922,12,0],[30,1923,1,0],[29,1923,2,0],[30,1923,3,0],[30,1923,4,0],[29,1923,5,0],[30,1923,6,0],[29,1923,7,0],[30,1923,8,0],[29,1923,9,0],[30,1923,10,0],[29,1923,11,0],[29,1923,12,0],[30,1924,1,0],[30,1924,2,0],[29,1924,3,0],[30,1924,4,0],[29,1924,5,0],[30,1924,6,0],[30,1924,7,0],[29,1924,8,0],[30,1924,9,0],[29,1924,10,0],[30,1924,11,0],[29,1924,12,0],[29,1925,1,0],[30,1925,2,0],[29,1925,3,0],[30,1925,4,0],[30,1925,4,1],[29,1925,5,0],[30,1925,6,0],[29,1925,7,0],[30,1925,8,0],[30,1925,9,0],[29,1925,10,0],[30,1925,11,0],[29,1925,12,0],[30,1926,1,0],[29,1926,2,0],[29,1926,3,0],[30,1926,4,0],[29,1926,5,0],[30,1926,6,0],[29,1926,7,0],[30,1926,8,0],[30,1926,9,0],[29,1926,10,0],[30,1926,11,0],[30,1926,12,0],[29,1927,1,0],[30,1927,2,0],[29,1927,3,0],[29,1927,4,0],[30,1927,5,0],[29,1927,6,0],[30,1927,7,0],[29,1927,8,0],[30,1927,9,0],[30,1927,10,0],[29,1927,11,0],[30,1927,12,0],[30,1928,1,0],[29,1928,2,0],[30,1928,2,1],[29,1928,3,0],[29,1928,4,0],[30,1928,5,0],[29,1928,6,0],[29,1928,7,0],[30,1928,8,0],[30,1928,9,0],[29,1928,10,0],[30,1928,11,0],[30,1928,12,0],[30,1929,1,0],[29,1929,2,0],[30,1929,3,0],[29,1929,4,0],[29,1929,5,0],[30,1929,6,0],[29,1929,7,0],[29,1929,8,0],[30,1929,9,0],[29,1929,10,0],[30,1929,11,0],[30,1929,12,0],[30,1930,1,0],[29,1930,2,0],[30,1930,3,0],[30,1930,4,0],[29,1930,5,0],[29,1930,6,0],[30,1930,6,1],[29,1930,7,0],[29,1930,8,0],[30,1930,9,0],[29,1930,10,0],[30,1930,11,0],[30,1930,12,0],[29,1931,1,0],[30,1931,2,0],[30,1931,3,0],[30,1931,4,0],[29,1931,5,0],[29,1931,6,0],[30,1931,7,0],[29,1931,8,0],[29,1931,9,0],[30,1931,10,0],[29,1931,11,0],[30,1931,12,0],[29,1932,1,0],[30,1932,2,0],[30,1932,3,0],[30,1932,4,0],[29,1932,5,0],[30,1932,6,0],[29,1932,7,0],[30,1932,8,0],[29,1932,9,0],[29,1932,10,0],[30,1932,11,0],[29,1932,12,0],[30,1933,1,0],[29,1933,2,0],[30,1933,3,0],[30,1933,4,0],[29,1933,5,0],[30,1933,5,1],[30,1933,6,0],[29,1933,7,0],[30,1933,8,0],[29,1933,9,0],[30,1933,10,0],[29,1933,11,0],[29,1933,12,0],[30,1934,1,0],[29,1934,2,0],[30,1934,3,0],[29,1934,4,0],[30,1934,5,0],[30,1934,6,0],[29,1934,7,0],[30,1934,8,0],[30,1934,9,0],[29,1934,10,0],[30,1934,11,0],[29,1934,12,0],[30,1935,1,0],[29,1935,2,0],[29,1935,3,0],[30,1935,4,0],[29,1935,5,0],[30,1935,6,0],[29,1935,7,0],[30,1935,8,0],[30,1935,9,0],[29,1935,10,0],[30,1935,11,0],[30,1935,12,0],[29,1936,1,0],[30,1936,2,0],[29,1936,3,0],[29,1936,3,1],[30,1936,4,0],[29,1936,5,0],[30,1936,6,0],[29,1936,7,0],[30,1936,8,0],[29,1936,9,0],[30,1936,10,0],[30,1936,11,0],[30,1936,12,0],[29,1937,1,0],[30,1937,2,0],[29,1937,3,0],[29,1937,4,0],[30,1937,5,0],[29,1937,6,0],[29,1937,7,0],[30,1937,8,0],[29,1937,9,0],[30,1937,10,0],[30,1937,11,0],[30,1937,12,0],[29,1938,1,0],[30,1938,2,0],[30,1938,3,0],[29,1938,4,0],[29,1938,5,0],[30,1938,6,0],[29,1938,7,0],[29,1938,7,1],[30,1938,8,0],[29,1938,9,0],[30,1938,10,0],[30,1938,11,0],[29,1938,12,0],[30,1939,1,0],[30,1939,2,0],[30,1939,3,0],[29,1939,4,0],[29,1939,5,0],[30,1939,6,0],[29,1939,7,0],[29,1939,8,0],[30,1939,9,0],[29,1939,10,0],[30,1939,11,0],[29,1939,12,0],[30,1940,1,0],[30,1940,2,0],[30,1940,3,0],[29,1940,4,0],[30,1940,5,0],[29,1940,6,0],[30,1940,7,0],[29,1940,8,0],[29,1940,9,0],[30,1940,10,0],[29,1940,11,0],[30,1940,12,0],[29,1941,1,0],[30,1941,2,0],[30,1941,3,0],[29,1941,4,0],[30,1941,5,0],[30,1941,6,0],[29,1941,6,1],[30,1941,7,0],[29,1941,8,0],[29,1941,9,0],[30,1941,10,0],[29,1941,11,0],[30,1941,12,0],[29,1942,1,0],[30,1942,2,0],[29,1942,3,0],[30,1942,4,0],[30,1942,5,0],[29,1942,6,0],[30,1942,7,0],[30,1942,8,0],[29,1942,9,0],[30,1942,10,0],[29,1942,11,0],[29,1942,12,0],[30,1943,1,0],[29,1943,2,0],[30,1943,3,0],[29,1943,4,0],[30,1943,5,0],[29,1943,6,0],[30,1943,7,0],[30,1943,8,0],[29,1943,9,0],[30,1943,10,0],[30,1943,11,0],[29,1943,12,0],[30,1944,1,0],[29,1944,2,0],[29,1944,3,0],[30,1944,4,0],[29,1944,4,1],[30,1944,5,0],[29,1944,6,0],[30,1944,7,0],[29,1944,8,0],[30,1944,9,0],[30,1944,10,0],[29,1944,11,0],[30,1944,12,0],[30,1945,1,0],[29,1945,2,0],[29,1945,3,0],[30,1945,4,0],[29,1945,5,0],[29,1945,6,0],[30,1945,7,0],[29,1945,8,0],[30,1945,9,0],[30,1945,10,0],[30,1945,11,0],[29,1945,12,0],[30,1946,1,0],[30,1946,2,0],[29,1946,3,0],[29,1946,4,0],[30,1946,5,0],[29,1946,6,0],[29,1946,7,0],[30,1946,8,0],[29,1946,9,0],[30,1946,10,0],[30,1946,11,0],[29,1946,12,0],[30,1947,1,0],[30,1947,2,0],[30,1947,2,1],[29,1947,3,0],[29,1947,4,0],[30,1947,5,0],[29,1947,6,0],[29,1947,7,0],[30,1947,8,0],[29,1947,9,0],[30,1947,10,0],[29,1947,11,0],[30,1947,12,0],[30,1948,1,0],[30,1948,2,0],[29,1948,3,0],[30,1948,4,0],[29,1948,5,0],[30,1948,6,0],[29,1948,7,0],[29,1948,8,0],[30,1948,9,0],[29,1948,10,0],[30,1948,11,0],[29,1948,12,0],[30,1949,1,0],[30,1949,2,0],[30,1949,3,0],[29,1949,4,0],[30,1949,5,0],[29,1949,6,0],[30,1949,7,0],[29,1949,7,1],[29,1949,8,0],[30,1949,9,0],[29,1949,10,0],[30,1949,11,0],[29,1949,12,0],[30,1950,1,0],[30,1950,2,0],[29,1950,3,0],[30,1950,4,0],[30,1950,5,0],[29,1950,6,0],[30,1950,7,0],[29,1950,8,0],[29,1950,9,0],[30,1950,10,0],[29,1950,11,0],[30,1950,12,0],[29,1951,1,0],[30,1951,2,0],[29,1951,3,0],[30,1951,4,0],[30,1951,5,0],[29,1951,6,0],[30,1951,7,0],[29,1951,8,0],[30,1951,9,0],[29,1951,10,0],[30,1951,11,0],[29,1951,12,0],[30,1952,1,0],[29,1952,2,0],[30,1952,3,0],[29,1952,4,0],[30,1952,5,0],[29,1952,5,1],[30,1952,6,0],[30,1952,7,0],[29,1952,8,0],[30,1952,9,0],[29,1952,10,0],[30,1952,11,0],[29,1952,12,0],[30,1953,1,0],[29,1953,2,0],[30,1953,3,0],[29,1953,4,0],[29,1953,5,0],[30,1953,6,0],[30,1953,7,0],[29,1953,8,0],[30,1953,9,0],[30,1953,10,0],[29,1953,11,0],[30,1953,12,0],[30,1954,1,0],[29,1954,2,0],[29,1954,3,0],[30,1954,4,0],[29,1954,5,0],[29,1954,6,0],[30,1954,7,0],[29,1954,8,0],[30,1954,9,0],[30,1954,10,0],[29,1954,11,0],[30,1954,12,0],[30,1955,1,0],[30,1955,2,0],[29,1955,3,0],[29,1955,3,1],[30,1955,4,0],[29,1955,5,0],[29,1955,6,0],[30,1955,7,0],[29,1955,8,0],[30,1955,9,0],[29,1955,10,0],[30,1955,11,0],[30,1955,12,0],[30,1956,1,0],[29,1956,2,0],[30,1956,3,0],[29,1956,4,0],[30,1956,5,0],[29,1956,6,0],[29,1956,7,0],[30,1956,8,0],[29,1956,9,0],[30,1956,10,0],[29,1956,11,0],[30,1956,12,0],[30,1957,1,0],[30,1957,2,0],[29,1957,3,0],[30,1957,4,0],[29,1957,5,0],[30,1957,6,0],[29,1957,7,0],[29,1957,8,0],[30,1957,8,1],[29,1957,9,0],[30,1957,10,0],[29,1957,11,0],[30,1957,12,0],[30,1958,1,0],[29,1958,2,0],[30,1958,3,0],[30,1958,4,0],[29,1958,5,0],[30,1958,6,0],[29,1958,7,0],[29,1958,8,0],[30,1958,9,0],[29,1958,10,0],[30,1958,11,0],[29,1958,12,0],[30,1959,1,0],[29,1959,2,0],[30,1959,3,0],[30,1959,4,0],[29,1959,5,0],[30,1959,6,0],[29,1959,7,0],[30,1959,8,0],[29,1959,9,0],[30,1959,10,0],[29,1959,11,0],[30,1959,12,0],[29,1960,1,0],[30,1960,2,0],[29,1960,3,0],[30,1960,4,0],[29,1960,5,0],[30,1960,6,0],[30,1960,6,1],[29,1960,7,0],[30,1960,8,0],[29,1960,9,0],[30,1960,10,0],[29,1960,11,0],[30,1960,12,0],[29,1961,1,0],[30,1961,2,0],[29,1961,3,0],[30,1961,4,0],[29,1961,5,0],[30,1961,6,0],[29,1961,7,0],[30,1961,8,0],[30,1961,9,0],[29,1961,10,0],[30,1961,11,0],[29,1961,12,0],[30,1962,1,0],[29,1962,2,0],[30,1962,3,0],[29,1962,4,0],[29,1962,5,0],[30,1962,6,0],[29,1962,7,0],[30,1962,8,0],[30,1962,9,0],[29,1962,10,0],[30,1962,11,0],[30,1962,12,0],[29,1963,1,0],[30,1963,2,0],[29,1963,3,0],[30,1963,4,0],[29,1963,4,1],[29,1963,5,0],[30,1963,6,0],[29,1963,7,0],[30,1963,8,0],[29,1963,9,0],[30,1963,10,0],[30,1963,11,0],[30,1963,12,0],[29,1964,1,0],[30,1964,2,0],[29,1964,3,0],[30,1964,4,0],[29,1964,5,0],[29,1964,6,0],[30,1964,7,0],[29,1964,8,0],[30,1964,9,0],[29,1964,10,0],[30,1964,11,0],[30,1964,12,0],[30,1965,1,0],[29,1965,2,0],[30,1965,3,0],[29,1965,4,0],[30,1965,5,0],[29,1965,6,0],[29,1965,7,0],[30,1965,8,0],[29,1965,9,0],[29,1965,10,0],[30,1965,11,0],[30,1965,12,0],[30,1966,1,0],[29,1966,2,0],[30,1966,3,0],[30,1966,3,1],[29,1966,4,0],[30,1966,5,0],[29,1966,6,0],[29,1966,7,0],[30,1966,8,0],[29,1966,9,0],[29,1966,10,0],[30,1966,11,0],[30,1966,12,0],[29,1967,1,0],[30,1967,2,0],[30,1967,3,0],[29,1967,4,0],[30,1967,5,0],[30,1967,6,0],[29,1967,7,0],[29,1967,8,0],[30,1967,9,0],[29,1967,10,0],[30,1967,11,0],[29,1967,12,0],[30,1968,1,0],[29,1968,2,0],[30,1968,3,0],[30,1968,4,0],[29,1968,5,0],[30,1968,6,0],[29,1968,7,0],[30,1968,7,1],[29,1968,8,0],[30,1968,9,0],[29,1968,10,0],[30,1968,11,0],[29,1968,12,0],[30,1969,1,0],[29,1969,2,0],[30,1969,3,0],[29,1969,4,0],[30,1969,5,0],[29,1969,6,0],[30,1969,7,0],[30,1969,8,0],[29,1969,9,0],[30,1969,10,0],[29,1969,11,0],[30,1969,12,0],[29,1970,1,0],[30,1970,2,0],[29,1970,3,0],[29,1970,4,0],[30,1970,5,0],[30,1970,6,0],[29,1970,7,0],[30,1970,8,0],[29,1970,9,0],[30,1970,10,0],[30,1970,11,0],[29,1970,12,0],[30,1971,1,0],[29,1971,2,0],[30,1971,3,0],[29,1971,4,0],[29,1971,5,0],[30,1971,5,1],[29,1971,6,0],[30,1971,7,0],[29,1971,8,0],[30,1971,9,0],[30,1971,10,0],[30,1971,11,0],[29,1971,12,0],[30,1972,1,0],[29,1972,2,0],[30,1972,3,0],[29,1972,4,0],[29,1972,5,0],[30,1972,6,0],[29,1972,7,0],[30,1972,8,0],[29,1972,9,0],[30,1972,10,0],[30,1972,11,0],[30,1972,12,0],[29,1973,1,0],[30,1973,2,0],[29,1973,3,0],[30,1973,4,0],[29,1973,5,0],[29,1973,6,0],[30,1973,7,0],[29,1973,8,0],[29,1973,9,0],[30,1973,10,0],[30,1973,11,0],[30,1973,12,0],[29,1974,1,0],[30,1974,2,0],[30,1974,3,0],[29,1974,4,0],[30,1974,4,1],[29,1974,5,0],[29,1974,6,0],[30,1974,7,0],[29,1974,8,0],[29,1974,9,0],[30,1974,10,0],[30,1974,11,0],[29,1974,12,0],[30,1975,1,0],[30,1975,2,0],[30,1975,3,0],[29,1975,4,0],[30,1975,5,0],[29,1975,6,0],[29,1975,7,0],[30,1975,8,0],[29,1975,9,0],[29,1975,10,0],[30,1975,11,0],[29,1975,12,0],[30,1976,1,0],[30,1976,2,0],[30,1976,3,0],[29,1976,4,0],[30,1976,5,0],[29,1976,6,0],[30,1976,7,0],[29,1976,8,0],[30,1976,8,1],[29,1976,9,0],[30,1976,10,0],[29,1976,11,0],[29,1976,12,0],[30,1977,1,0],[30,1977,2,0],[29,1977,3,0],[30,1977,4,0],[30,1977,5,0],[29,1977,6,0],[30,1977,7,0],[29,1977,8,0],[30,1977,9,0],[29,1977,10,0],[30,1977,11,0],[29,1977,12,0],[29,1978,1,0],[30,1978,2,0],[30,1978,3,0],[29,1978,4,0],[30,1978,5,0],[29,1978,6,0],[30,1978,7,0],[30,1978,8,0],[29,1978,9,0],[30,1978,10,0],[29,1978,11,0],[30,1978,12,0],[29,1979,1,0],[30,1979,2,0],[29,1979,3,0],[29,1979,4,0],[30,1979,5,0],[29,1979,6,0],[30,1979,6,1],[30,1979,7,0],[29,1979,8,0],[30,1979,9,0],[30,1979,10,0],[29,1979,11,0],[30,1979,12,0],[29,1980,1,0],[30,1980,2,0],[29,1980,3,0],[29,1980,4,0],[30,1980,5,0],[29,1980,6,0],[30,1980,7,0],[29,1980,8,0],[30,1980,9,0],[30,1980,10,0],[29,1980,11,0],[30,1980,12,0],[30,1981,1,0],[29,1981,2,0],[30,1981,3,0],[29,1981,4,0],[29,1981,5,0],[30,1981,6,0],[29,1981,7,0],[29,1981,8,0],[30,1981,9,0],[30,1981,10,0],[29,1981,11,0],[30,1981,12,0],[30,1982,1,0],[30,1982,2,0],[29,1982,3,0],[30,1982,4,0],[29,1982,4,1],[29,1982,5,0],[30,1982,6,0],[29,1982,7,0],[29,1982,8,0],[30,1982,9,0],[30,1982,10,0],[29,1982,11,0],[30,1982,12,0],[30,1983,1,0],[30,1983,2,0],[29,1983,3,0],[30,1983,4,0],[29,1983,5,0],[29,1983,6,0],[30,1983,7,0],[29,1983,8,0],[29,1983,9,0],[30,1983,10,0],[29,1983,11,0],[30,1983,12,0],[30,1984,1,0],[30,1984,2,0],[29,1984,3,0],[30,1984,4,0],[30,1984,5,0],[29,1984,6,0],[29,1984,7,0],[30,1984,8,0],[29,1984,9,0],[29,1984,10,0],[30,1984,10,1],[29,1984,11,0],[30,1984,12,0],[30,1985,1,0],[29,1985,2,0],[30,1985,3,0],[30,1985,4,0],[29,1985,5,0],[30,1985,6,0],[29,1985,7,0],[30,1985,8,0],[29,1985,9,0],[29,1985,10,0],[30,1985,11,0],[29,1985,12,0],[30,1986,1,0],[29,1986,2,0],[30,1986,3,0],[30,1986,4,0],[29,1986,5,0],[30,1986,6,0],[30,1986,7,0],[29,1986,8,0],[30,1986,9,0],[29,1986,10,0],[30,1986,11,0],[29,1986,12,0],[29,1987,1,0],[30,1987,2,0],[29,1987,3,0],[30,1987,4,0],[30,1987,5,0],[29,1987,6,0],[30,1987,6,1],[29,1987,7,0],[30,1987,8,0],[30,1987,9,0],[29,1987,10,0],[30,1987,11,0],[29,1987,12,0],[30,1988,1,0],[29,1988,2,0],[29,1988,3,0],[30,1988,4,0],[29,1988,5,0],[30,1988,6,0],[29,1988,7,0],[30,1988,8,0],[30,1988,9,0],[29,1988,10,0],[30,1988,11,0],[30,1988,12,0],[29,1989,1,0],[30,1989,2,0],[29,1989,3,0],[29,1989,4,0],[30,1989,5,0],[29,1989,6,0],[30,1989,7,0],[29,1989,8,0],[30,1989,9,0],[30,1989,10,0],[29,1989,11,0],[30,1989,12,0],[30,1990,1,0],[29,1990,2,0],[30,1990,3,0],[29,1990,4,0],[29,1990,5,0],[30,1990,5,1],[29,1990,6,0],[29,1990,7,0],[30,1990,8,0],[30,1990,9,0],[29,1990,10,0],[30,1990,11,0],[30,1990,12,0],[30,1991,1,0],[29,1991,2,0],[30,1991,3,0],[29,1991,4,0],[29,1991,5,0],[30,1991,6,0],[29,1991,7,0],[29,1991,8,0],[30,1991,9,0],[29,1991,10,0],[30,1991,11,0],[30,1991,12,0],[30,1992,1,0],[29,1992,2,0],[30,1992,3,0],[30,1992,4,0],[29,1992,5,0],[29,1992,6,0],[30,1992,7,0],[29,1992,8,0],[29,1992,9,0],[30,1992,10,0],[29,1992,11,0],[30,1992,12,0],[30,1993,1,0],[29,1993,2,0],[30,1993,3,0],[30,1993,3,1],[29,1993,4,0],[30,1993,5,0],[29,1993,6,0],[30,1993,7,0],[29,1993,8,0],[29,1993,9,0],[30,1993,10,0],[29,1993,11,0],[30,1993,12,0],[29,1994,1,0],[30,1994,2,0],[30,1994,3,0],[30,1994,4,0],[29,1994,5,0],[30,1994,6,0],[29,1994,7,0],[30,1994,8,0],[29,1994,9,0],[29,1994,10,0],[30,1994,11,0],[29,1994,12,0],[30,1995,1,0],[29,1995,2,0],[30,1995,3,0],[30,1995,4,0],[29,1995,5,0],[30,1995,6,0],[30,1995,7,0],[29,1995,8,0],[30,1995,8,1],[29,1995,9,0],[30,1995,10,0],[29,1995,11,0],[29,1995,12,0],[30,1996,1,0],[29,1996,2,0],[30,1996,3,0],[29,1996,4,0],[30,1996,5,0],[30,1996,6,0],[29,1996,7,0],[30,1996,8,0],[29,1996,9,0],[30,1996,10,0],[30,1996,11,0],[29,1996,12,0],[30,1997,1,0],[29,1997,2,0],[29,1997,3,0],[30,1997,4,0],[29,1997,5,0],[30,1997,6,0],[29,1997,7,0],[30,1997,8,0],[30,1997,9,0],[29,1997,10,0],[30,1997,11,0],[30,1997,12,0],[29,1998,1,0],[30,1998,2,0],[29,1998,3,0],[29,1998,4,0],[30,1998,5,0],[29,1998,5,1],[29,1998,6,0],[30,1998,7,0],[30,1998,8,0],[29,1998,9,0],[30,1998,10,0],[30,1998,11,0],[30,1998,12,0],[29,1999,1,0],[30,1999,2,0],[29,1999,3,0],[29,1999,4,0],[30,1999,5,0],[29,1999,6,0],[29,1999,7,0],[30,1999,8,0],[29,1999,9,0],[30,1999,10,0],[30,1999,11,0],[30,1999,12,0],[29,2000,1,0],[30,2000,2,0],[30,2000,3,0],[29,2000,4,0],[29,2000,5,0],[30,2000,6,0],[29,2000,7,0],[29,2000,8,0],[30,2000,9,0],[29,2000,10,0],[30,2000,11,0],[30,2000,12,0],[29,2001,1,0],[30,2001,2,0],[30,2001,3,0],[30,2001,4,0],[29,2001,4,1],[29,2001,5,0],[30,2001,6,0],[29,2001,7,0],[29,2001,8,0],[30,2001,9,0],[29,2001,10,0],[30,2001,11,0],[29,2001,12,0],[30,2002,1,0],[30,2002,2,0],[30,2002,3,0],[29,2002,4,0],[30,2002,5,0],[29,2002,6,0],[30,2002,7,0],[29,2002,8,0],[29,2002,9,0],[30,2002,10,0],[29,2002,11,0],[30,2002,12,0],[29,2003,1,0],[30,2003,2,0],[30,2003,3,0],[29,2003,4,0],[30,2003,5,0],[30,2003,6,0],[29,2003,7,0],[30,2003,8,0],[29,2003,9,0],[29,2003,10,0],[30,2003,11,0],[29,2003,12,0],[30,2004,1,0],[29,2004,2,0],[30,2004,2,1],[29,2004,3,0],[30,2004,4,0],[30,2004,5,0],[29,2004,6,0],[30,2004,7,0],[29,2004,8,0],[30,2004,9,0],[29,2004,10,0],[30,2004,11,0],[29,2004,12,0],[30,2005,1,0],[29,2005,2,0],[30,2005,3,0],[29,2005,4,0],[30,2005,5,0],[29,2005,6,0],[30,2005,7,0],[30,2005,8,0],[29,2005,9,0],[30,2005,10,0],[30,2005,11,0],[29,2005,12,0],[29,2006,1,0],[30,2006,2,0],[29,2006,3,0],[30,2006,4,0],[29,2006,5,0],[30,2006,6,0],[29,2006,7,0],[30,2006,7,1],[29,2006,8,0],[30,2006,9,0],[30,2006,10,0],[29,2006,11,0],[30,2006,12,0],[30,2007,1,0],[29,2007,2,0],[29,2007,3,0],[30,2007,4,0],[29,2007,5,0],[29,2007,6,0],[30,2007,7,0],[29,2007,8,0],[30,2007,9,0],[30,2007,10,0],[30,2007,11,0],[29,2007,12,0],[30,2008,1,0],[30,2008,2,0],[29,2008,3,0],[29,2008,4,0],[30,2008,5,0],[29,2008,6,0],[29,2008,7,0],[30,2008,8,0],[29,2008,9,0],[30,2008,10,0],[30,2008,11,0],[29,2008,12,0],[30,2009,1,0],[30,2009,2,0],[30,2009,3,0],[29,2009,4,0],[29,2009,5,0],[30,2009,5,1],[29,2009,6,0],[29,2009,7,0],[30,2009,8,0],[29,2009,9,0],[30,2009,10,0],[29,2009,11,0],[30,2009,12,0],[30,2010,1,0],[30,2010,2,0],[29,2010,3,0],[30,2010,4,0],[29,2010,5,0],[30,2010,6,0],[29,2010,7,0],[29,2010,8,0],[30,2010,9,0],[29,2010,10,0],[30,2010,11,0],[29,2010,12,0],[30,2011,1,0],[30,2011,2,0],[29,2011,3,0],[30,2011,4,0],[30,2011,5,0],[29,2011,6,0],[30,2011,7,0],[29,2011,8,0],[29,2011,9,0],[30,2011,10,0],[29,2011,11,0],[30,2011,12,0],[29,2012,1,0],[30,2012,2,0],[29,2012,3,0],[30,2012,3,1],[30,2012,4,0],[30,2012,5,0],[29,2012,6,0],[30,2012,7,0],[29,2012,8,0],[29,2012,9,0],[30,2012,10,0],[29,2012,11,0],[30,2012,12,0],[29,2013,1,0],[30,2013,2,0],[29,2013,3,0],[30,2013,4,0],[30,2013,5,0],[29,2013,6,0],[30,2013,7,0],[29,2013,8,0],[30,2013,9,0],[29,2013,10,0],[30,2013,11,0],[29,2013,12,0],[30,2014,1,0],[29,2014,2,0],[30,2014,3,0],[29,2014,4,0],[30,2014,5,0],[29,2014,6,0],[30,2014,7,0],[29,2014,8,0],[30,2014,9,0],[30,2014,9,1],[29,2014,10,0],[30,2014,11,0],[29,2014,12,0],[30,2015,1,0],[29,2015,2,0],[30,2015,3,0],[29,2015,4,0],[29,2015,5,0],[30,2015,6,0],[29,2015,7,0],[30,2015,8,0],[30,2015,9,0],[30,2015,10,0],[29,2015,11,0],[30,2015,12,0],[29,2016,1,0],[30,2016,2,0],[29,2016,3,0],[30,2016,4,0],[29,2016,5,0],[29,2016,6,0],[30,2016,7,0],[29,2016,8,0],[30,2016,9,0],[30,2016,10,0],[29,2016,11,0],[30,2016,12,0],[30,2017,1,0],[29,2017,2,0],[30,2017,3,0],[29,2017,4,0],[30,2017,5,0],[29,2017,5,1],[29,2017,6,0],[30,2017,7,0],[29,2017,8,0],[30,2017,9,0],[29,2017,10,0],[30,2017,11,0],[30,2017,12,0],[30,2018,1,0],[29,2018,2,0],[30,2018,3,0],[29,2018,4,0],[30,2018,5,0],[29,2018,6,0],[29,2018,7,0],[30,2018,8,0],[29,2018,9,0],[30,2018,10,0],[29,2018,11,0],[30,2018,12,0],[30,2019,1,0],[30,2019,2,0],[29,2019,3,0],[30,2019,4,0],[29,2019,5,0],[30,2019,6,0],[29,2019,7,0],[29,2019,8,0],[30,2019,9,0],[29,2019,10,0],[30,2019,11,0],[29,2019,12,0],[30,2020,1,0],[30,2020,2,0],[29,2020,3,0],[30,2020,4,0],[30,2020,4,1],[29,2020,5,0],[30,2020,6,0],[29,2020,7,0],[29,2020,8,0],[30,2020,9,0],[29,2020,10,0],[30,2020,11,0],[29,2020,12,0],[30,2021,1,0],[29,2021,2,0],[30,2021,3,0],[30,2021,4,0],[29,2021,5,0],[30,2021,6,0],[29,2021,7,0],[30,2021,8,0],[29,2021,9,0],[30,2021,10,0],[29,2021,11,0],[30,2021,12,0],[29,2022,1,0],[30,2022,2,0],[29,2022,3,0],[30,2022,4,0],[29,2022,5,0],[30,2022,6,0],[30,2022,7,0],[29,2022,8,0],[30,2022,9,0],[29,2022,10,0],[30,2022,11,0],[29,2022,12,0],[30,2023,1,0],[29,2023,2,0],[30,2023,2,1],[29,2023,3,0],[30,2023,4,0],[29,2023,5,0],[30,2023,6,0],[29,2023,7,0],[30,2023,8,0],[30,2023,9,0],[29,2023,10,0],[30,2023,11,0],[29,2023,12,0],[30,2024,1,0],[29,2024,2,0],[30,2024,3,0],[29,2024,4,0],[29,2024,5,0],[30,2024,6,0],[29,2024,7,0],[30,2024,8,0],[30,2024,9,0],[29,2024,10,0],[30,2024,11,0],[30,2024,12,0],[29,2025,1,0],[30,2025,2,0],[29,2025,3,0],[30,2025,4,0],[29,2025,5,0],[29,2025,6,0],[30,2025,6,1],[29,2025,7,0],[30,2025,8,0],[29,2025,9,0],[30,2025,10,0],[30,2025,11,0],[30,2025,12,0],[29,2026,1,0],[30,2026,2,0],[29,2026,3,0],[30,2026,4,0],[29,2026,5,0],[29,2026,6,0],[30,2026,7,0],[29,2026,8,0],[30,2026,9,0],[29,2026,10,0],[30,2026,11,0],[30,2026,12,0],[30,2027,1,0],[29,2027,2,0],[30,2027,3,0],[29,2027,4,0],[30,2027,5,0],[29,2027,6,0],[29,2027,7,0],[30,2027,8,0],[29,2027,9,0],[29,2027,10,0],[30,2027,11,0],[30,2027,12,0],[30,2028,1,0],[29,2028,2,0],[30,2028,3,0],[30,2028,4,0],[29,2028,5,0],[30,2028,5,1],[29,2028,6,0],[29,2028,7,0],[30,2028,8,0],[29,2028,9,0],[29,2028,10,0],[30,2028,11,0],[30,2028,12,0],[29,2029,1,0],[30,2029,2,0],[30,2029,3,0],[29,2029,4,0],[30,2029,5,0],[30,2029,6,0],[29,2029,7,0],[29,2029,8,0],[30,2029,9,0],[29,2029,10,0],[29,2029,11,0],[30,2029,12,0],[30,2030,1,0],[29,2030,2,0],[30,2030,3,0],[29,2030,4,0],[30,2030,5,0],[30,2030,6,0],[29,2030,7,0],[30,2030,8,0],[29,2030,9,0],[30,2030,10,0],[29,2030,11,0],[30,2030,12,0],[29,2031,1,0],[30,2031,2,0],[29,2031,3,0],[30,2031,3,1],[29,2031,4,0],[30,2031,5,0],[29,2031,6,0],[30,2031,7,0],[30,2031,8,0],[29,2031,9,0],[30,2031,10,0],[29,2031,11,0],[30,2031,12,0],[29,2032,1,0],[30,2032,2,0],[29,2032,3,0],[29,2032,4,0],[30,2032,5,0],[29,2032,6,0],[30,2032,7,0],[30,2032,8,0],[29,2032,9,0],[30,2032,10,0],[30,2032,11,0],[29,2032,12,0],[30,2033,1,0],[29,2033,2,0],[30,2033,3,0],[29,2033,4,0],[29,2033,5,0],[30,2033,6,0],[29,2033,7,0],[30,2033,8,0],[29,2033,9,0],[30,2033,10,0],[30,2033,11,0],[30,2033,11,1],[29,2033,12,0],[30,2034,1,0],[29,2034,2,0],[30,2034,3,0],[29,2034,4,0],[29,2034,5,0],[30,2034,6,0],[29,2034,7,0],[30,2034,8,0],[29,2034,9,0],[30,2034,10,0],[30,2034,11,0],[30,2034,12,0],[29,2035,1,0],[30,2035,2,0],[29,2035,3,0],[30,2035,4,0],[29,2035,5,0],[29,2035,6,0],[30,2035,7,0],[29,2035,8,0],[29,2035,9,0],[30,2035,10,0],[30,2035,11,0],[29,2035,12,0],[30,2036,1,0],[30,2036,2,0],[30,2036,3,0],[29,2036,4,0],[30,2036,5,0],[29,2036,6,0],[29,2036,6,1],[30,2036,7,0],[29,2036,8,0],[29,2036,9,0],[30,2036,10,0],[30,2036,11,0],[29,2036,12,0],[30,2037,1,0],[30,2037,2,0],[30,2037,3,0],[29,2037,4,0],[30,2037,5,0],[29,2037,6,0],[29,2037,7,0],[30,2037,8,0],[29,2037,9,0],[29,2037,10,0],[30,2037,11,0],[29,2037,12,0],[30,2038,1,0],[30,2038,2,0],[30,2038,3,0],[29,2038,4,0],[30,2038,5,0],[29,2038,6,0],[30,2038,7,0],[29,2038,8,0],[30,2038,9,0],[29,2038,10,0],[29,2038,11,0],[30,2038,12,0],[29,2039,1,0],[30,2039,2,0],[30,2039,3,0],[29,2039,4,0],[30,2039,5,0],[30,2039,5,1],[29,2039,6,0],[30,2039,7,0],[29,2039,8,0],[30,2039,9,0],[29,2039,10,0],[30,2039,11,0],[29,2039,12,0],[29,2040,1,0],[30,2040,2,0],[29,2040,3,0],[30,2040,4,0],[30,2040,5,0],[29,2040,6,0],[30,2040,7,0],[30,2040,8,0],[29,2040,9,0],[30,2040,10,0],[29,2040,11,0],[30,2040,12,0],[29,2041,1,0],[30,2041,2,0],[29,2041,3,0],[29,2041,4,0],[30,2041,5,0],[29,2041,6,0],[30,2041,7,0],[30,2041,8,0],[29,2041,9,0],[30,2041,10,0],[30,2041,11,0],[29,2041,12,0],[30,2042,1,0],[29,2042,2,0],[30,2042,2,1],[29,2042,3,0],[29,2042,4,0],[30,2042,5,0],[29,2042,6,0],[30,2042,7,0],[29,2042,8,0],[30,2042,9,0],[30,2042,10,0],[29,2042,11,0],[30,2042,12,0],[30,2043,1,0],[29,2043,2,0],[30,2043,3,0],[29,2043,4,0],[29,2043,5,0],[30,2043,6,0],[29,2043,7,0],[29,2043,8,0],[30,2043,9,0],[30,2043,10,0],[29,2043,11,0],[30,2043,12,0],[30,2044,1,0],[30,2044,2,0],[29,2044,3,0],[30,2044,4,0],[29,2044,5,0],[29,2044,6,0],[30,2044,7,0],[29,2044,7,1],[29,2044,8,0],[30,2044,9,0],[29,2044,10,0],[30,2044,11,0],[30,2044,12,0],[30,2045,1,0],[30,2045,2,0],[29,2045,3,0],[30,2045,4,0],[29,2045,5,0],[29,2045,6,0],[30,2045,7,0],[29,2045,8,0],[29,2045,9,0],[30,2045,10,0],[29,2045,11,0],[30,2045,12,0],[30,2046,1,0],[30,2046,2,0],[29,2046,3,0],[30,2046,4,0],[30,2046,5,0],[29,2046,6,0],[29,2046,7,0],[30,2046,8,0],[29,2046,9,0],[29,2046,10,0],[30,2046,11,0],[29,2046,12,0],[30,2047,1,0],[30,2047,2,0],[29,2047,3,0],[30,2047,4,0],[30,2047,5,0],[29,2047,5,1],[30,2047,6,0],[29,2047,7,0],[30,2047,8,0],[29,2047,9,0],[29,2047,10,0],[30,2047,11,0],[29,2047,12,0],[30,2048,1,0],[29,2048,2,0],[30,2048,3,0],[30,2048,4,0],[29,2048,5,0],[30,2048,6,0],[30,2048,7,0],[29,2048,8,0],[30,2048,9,0],[29,2048,10,0],[30,2048,11,0],[29,2048,12,0],[29,2049,1,0],[30,2049,2,0],[29,2049,3,0],[30,2049,4,0],[29,2049,5,0],[30,2049,6,0],[30,2049,7,0],[29,2049,8,0],[30,2049,9,0],[30,2049,10,0],[29,2049,11,0],[30,2049,12,0],[29,2050,1,0],[30,2050,2,0],[29,2050,3,0],[29,2050,3,1],[30,2050,4,0],[29,2050,5,0],[30,2050,6,0],[29,2050,7,0],[30,2050,8,0],[30,2050,9,0],[29,2050,10,0],[30,2050,11,0],[30,2050,12,0],[29,2051,1,0],[30,2051,2,0],[29,2051,3,0],[29,2051,4,0],[30,2051,5,0],[29,2051,6,0],[30,2051,7,0],[29,2051,8,0],[30,2051,9,0],[29,2051,10,0],[30,2051,11,0],[30,2051,12,0],[30,2052,1,0],[29,2052,2,0],[30,2052,3,0],[29,2052,4,0],[29,2052,5,0],[30,2052,6,0],[29,2052,7,0],[29,2052,8,0],[30,2052,8,1],[30,2052,9,0],[29,2052,10,0],[30,2052,11,0],[30,2052,12,0],[30,2053,1,0],[29,2053,2,0],[30,2053,3,0],[29,2053,4,0],[29,2053,5,0],[30,2053,6,0],[29,2053,7,0],[29,2053,8,0],[30,2053,9,0],[29,2053,10,0],[30,2053,11,0],[30,2053,12,0],[30,2054,1,0],[29,2054,2,0],[30,2054,3,0],[30,2054,4,0],[29,2054,5,0],[29,2054,6,0],[30,2054,7,0],[29,2054,8,0],[29,2054,9,0],[30,2054,10,0],[29,2054,11,0],[30,2054,12,0],[30,2055,1,0],[29,2055,2,0],[30,2055,3,0],[30,2055,4,0],[29,2055,5,0],[30,2055,6,0],[29,2055,6,1],[30,2055,7,0],[29,2055,8,0],[29,2055,9,0],[30,2055,10,0],[29,2055,11,0],[30,2055,12,0],[29,2056,1,0],[30,2056,2,0],[30,2056,3,0],[30,2056,4,0],[29,2056,5,0],[30,2056,6,0],[29,2056,7,0],[30,2056,8,0],[29,2056,9,0],[29,2056,10,0],[30,2056,11,0],[29,2056,12,0],[30,2057,1,0],[29,2057,2,0],[30,2057,3,0],[30,2057,4,0],[29,2057,5,0],[30,2057,6,0],[29,2057,7,0],[30,2057,8,0],[30,2057,9,0],[29,2057,10,0],[29,2057,11,0],[30,2057,12,0],[29,2058,1,0],[30,2058,2,0],[29,2058,3,0],[30,2058,4,0],[29,2058,4,1],[30,2058,5,0],[30,2058,6,0],[29,2058,7,0],[30,2058,8,0],[29,2058,9,0],[30,2058,10,0],[30,2058,11,0],[29,2058,12,0],[29,2059,1,0],[30,2059,2,0],[29,2059,3,0],[30,2059,4,0],[29,2059,5,0],[30,2059,6,0],[29,2059,7,0],[30,2059,8,0],[30,2059,9,0],[29,2059,10,0],[30,2059,11,0],[30,2059,12,0],[29,2060,1,0],[30,2060,2,0],[29,2060,3,0],[29,2060,4,0],[30,2060,5,0],[29,2060,6,0],[29,2060,7,0],[30,2060,8,0],[30,2060,9,0],[29,2060,10,0],[30,2060,11,0],[30,2060,12,0],[30,2061,1,0],[29,2061,2,0],[30,2061,3,0],[29,2061,3,1],[29,2061,4,0],[30,2061,5,0],[29,2061,6,0],[29,2061,7,0],[30,2061,8,0],[29,2061,9,0],[30,2061,10,0],[30,2061,11,0],[30,2061,12,0],[29,2062,1,0],[30,2062,2,0],[30,2062,3,0],[29,2062,4,0],[29,2062,5,0],[30,2062,6,0],[29,2062,7,0],[29,2062,8,0],[30,2062,9,0],[29,2062,10,0],[30,2062,11,0],[30,2062,12,0],[29,2063,1,0],[30,2063,2,0],[30,2063,3,0],[29,2063,4,0],[30,2063,5,0],[29,2063,6,0],[30,2063,7,0],[29,2063,7,1],[29,2063,8,0],[30,2063,9,0],[29,2063,10,0],[30,2063,11,0],[29,2063,12,0],[30,2064,1,0],[30,2064,2,0],[30,2064,3,0],[29,2064,4,0],[30,2064,5,0],[29,2064,6,0],[30,2064,7,0],[29,2064,8,0],[29,2064,9,0],[30,2064,10,0],[29,2064,11,0],[30,2064,12,0],[29,2065,1,0],[30,2065,2,0],[30,2065,3,0],[29,2065,4,0],[30,2065,5,0],[30,2065,6,0],[29,2065,7,0],[30,2065,8,0],[29,2065,9,0],[29,2065,10,0],[30,2065,11,0],[29,2065,12,0],[30,2066,1,0],[29,2066,2,0],[30,2066,3,0],[29,2066,4,0],[30,2066,5,0],[30,2066,5,1],[29,2066,6,0],[30,2066,7,0],[29,2066,8,0],[30,2066,9,0],[29,2066,10,0],[30,2066,11,0],[29,2066,12,0],[30,2067,1,0],[29,2067,2,0],[30,2067,3,0],[29,2067,4,0],[30,2067,5,0],[29,2067,6,0],[30,2067,7,0],[30,2067,8,0],[29,2067,9,0],[30,2067,10,0],[29,2067,11,0],[30,2067,12,0],[29,2068,1,0],[30,2068,2,0],[29,2068,3,0],[30,2068,4,0],[29,2068,5,0],[30,2068,6,0],[29,2068,7,0],[30,2068,8,0],[29,2068,9,0],[30,2068,10,0],[30,2068,11,0],[29,2068,12,0],[30,2069,1,0],[30,2069,2,0],[29,2069,3,0],[29,2069,4,0],[30,2069,4,1],[29,2069,5,0],[29,2069,6,0],[30,2069,7,0],[29,2069,8,0],[30,2069,9,0],[30,2069,10,0],[30,2069,11,0],[29,2069,12,0],[30,2070,1,0],[30,2070,2,0],[29,2070,3,0],[29,2070,4,0],[30,2070,5,0],[29,2070,6,0],[29,2070,7,0],[30,2070,8,0],[29,2070,9,0],[30,2070,10,0],[30,2070,11,0],[29,2070,12,0],[30,2071,1,0],[30,2071,2,0],[30,2071,3,0],[29,2071,4,0],[29,2071,5,0],[30,2071,6,0],[29,2071,7,0],[29,2071,8,0],[30,2071,8,1],[29,2071,9,0],[30,2071,10,0],[29,2071,11,0],[30,2071,12,0],[30,2072,1,0],[30,2072,2,0],[29,2072,3,0],[30,2072,4,0],[29,2072,5,0],[30,2072,6,0],[29,2072,7,0],[29,2072,8,0],[30,2072,9,0],[29,2072,10,0],[30,2072,11,0],[29,2072,12,0],[30,2073,1,0],[30,2073,2,0],[29,2073,3,0],[30,2073,4,0],[30,2073,5,0],[29,2073,6,0],[30,2073,7,0],[29,2073,8,0],[29,2073,9,0],[30,2073,10,0],[29,2073,11,0],[30,2073,12,0],[29,2074,1,0],[30,2074,2,0],[29,2074,3,0],[30,2074,4,0],[30,2074,5,0],[29,2074,6,0],[30,2074,6,1],[29,2074,7,0],[30,2074,8,0],[29,2074,9,0],[30,2074,10,0],[29,2074,11,0],[30,2074,12,0],[29,2075,1,0],[30,2075,2,0],[29,2075,3,0],[30,2075,4,0],[29,2075,5,0],[30,2075,6,0],[30,2075,7,0],[29,2075,8,0],[30,2075,9,0],[29,2075,10,0],[30,2075,11,0],[29,2075,12,0],[30,2076,1,0],[29,2076,2,0],[30,2076,3,0],[29,2076,4,0],[30,2076,5,0],[29,2076,6,0],[30,2076,7,0],[29,2076,8,0],[30,2076,9,0],[30,2076,10,0],[29,2076,11,0],[30,2076,12,0],[29,2077,1,0],[30,2077,2,0],[29,2077,3,0],[30,2077,4,0],[29,2077,4,1],[29,2077,5,0],[30,2077,6,0],[29,2077,7,0],[30,2077,8,0],[30,2077,9,0],[30,2077,10,0],[29,2077,11,0],[30,2077,12,0],[29,2078,1,0],[30,2078,2,0],[29,2078,3,0],[30,2078,4,0],[29,2078,5,0],[29,2078,6,0],[30,2078,7,0],[29,2078,8,0],[30,2078,9,0],[30,2078,10,0],[29,2078,11,0],[30,2078,12,0],[30,2079,1,0],[29,2079,2,0],[30,2079,3,0],[29,2079,4,0],[30,2079,5,0],[29,2079,6,0],[29,2079,7,0],[30,2079,8,0],[29,2079,9,0],[30,2079,10,0],[29,2079,11,0],[30,2079,12,0],[30,2080,1,0],[30,2080,2,0],[29,2080,3,0],[30,2080,3,1],[29,2080,4,0],[30,2080,5,0],[29,2080,6,0],[29,2080,7,0],[30,2080,8,0],[29,2080,9,0],[30,2080,10,0],[29,2080,11,0],[30,2080,12,0],[30,2081,1,0],[30,2081,2,0],[29,2081,3,0],[30,2081,4,0],[29,2081,5,0],[30,2081,6,0],[29,2081,7,0],[29,2081,8,0],[30,2081,9,0],[29,2081,10,0],[29,2081,11,0],[30,2081,12,0],[30,2082,1,0],[29,2082,2,0],[30,2082,3,0],[30,2082,4,0],[30,2082,5,0],[29,2082,6,0],[30,2082,7,0],[29,2082,7,1],[29,2082,8,0],[30,2082,9,0],[29,2082,10,0],[30,2082,11,0],[29,2082,12,0],[30,2083,1,0],[29,2083,2,0],[30,2083,3,0],[30,2083,4,0],[29,2083,5,0],[30,2083,6,0],[29,2083,7,0],[30,2083,8,0],[29,2083,9,0],[30,2083,10,0],[29,2083,11,0],[30,2083,12,0],[29,2084,1,0],[30,2084,2,0],[29,2084,3,0],[30,2084,4,0],[29,2084,5,0],[30,2084,6,0],[30,2084,7,0],[29,2084,8,0],[30,2084,9,0],[29,2084,10,0],[30,2084,11,0],[29,2084,12,0],[30,2085,1,0],[29,2085,2,0],[30,2085,3,0],[29,2085,4,0],[29,2085,5,0],[30,2085,5,1],[30,2085,6,0],[29,2085,7,0],[30,2085,8,0],[30,2085,9,0],[29,2085,10,0],[30,2085,11,0],[29,2085,12,0],[30,2086,1,0],[29,2086,2,0],[30,2086,3,0],[29,2086,4,0],[29,2086,5,0],[30,2086,6,0],[29,2086,7,0],[30,2086,8,0],[30,2086,9,0],[29,2086,10,0],[30,2086,11,0],[30,2086,12,0],[29,2087,1,0],[30,2087,2,0],[29,2087,3,0],[30,2087,4,0],[29,2087,5,0],[29,2087,6,0],[30,2087,7,0],[29,2087,8,0],[30,2087,9,0],[29,2087,10,0],[30,2087,11,0],[30,2087,12,0],[30,2088,1,0],[29,2088,2,0],[30,2088,3,0],[29,2088,4,0],[30,2088,4,1],[29,2088,5,0],[29,2088,6,0],[30,2088,7,0],[29,2088,8,0],[29,2088,9,0],[30,2088,10,0],[30,2088,11,0],[30,2088,12,0],[30,2089,1,0],[29,2089,2,0],[30,2089,3,0],[29,2089,4,0],[30,2089,5,0],[29,2089,6,0],[29,2089,7,0],[30,2089,8,0],[29,2089,9,0],[29,2089,10,0],[30,2089,11,0],[30,2089,12,0],[29,2090,1,0],[30,2090,2,0],[30,2090,3,0],[30,2090,4,0],[29,2090,5,0],[30,2090,6,0],[29,2090,7,0],[29,2090,8,0],[30,2090,8,1],[29,2090,9,0],[29,2090,10,0],[30,2090,11,0],[30,2090,12,0],[29,2091,1,0],[30,2091,2,0],[30,2091,3,0],[29,2091,4,0],[30,2091,5,0],[29,2091,6,0],[30,2091,7,0],[29,2091,8,0],[30,2091,9,0],[29,2091,10,0],[29,2091,11,0],[30,2091,12,0],[30,2092,1,0],[29,2092,2,0],[30,2092,3,0],[29,2092,4,0],[30,2092,5,0],[30,2092,6,0],[29,2092,7,0],[30,2092,8,0],[29,2092,9,0],[30,2092,10,0],[29,2092,11,0],[30,2092,12,0],[29,2093,1,0],[30,2093,2,0],[29,2093,3,0],[30,2093,4,0],[29,2093,5,0],[30,2093,6,0],[29,2093,6,1],[30,2093,7,0],[30,2093,8,0],[29,2093,9,0],[30,2093,10,0],[29,2093,11,0],[30,2093,12,0],[29,2094,1,0],[30,2094,2,0],[29,2094,3,0],[29,2094,4,0],[30,2094,5,0],[29,2094,6,0],[30,2094,7,0],[30,2094,8,0],[29,2094,9,0],[30,2094,10,0],[30,2094,11,0],[29,2094,12,0],[30,2095,1,0],[29,2095,2,0],[30,2095,3,0],[29,2095,4,0],[29,2095,5,0],[30,2095,6,0],[29,2095,7,0],[30,2095,8,0],[29,2095,9,0],[30,2095,10,0],[30,2095,11,0],[30,2095,12,0],[29,2096,1,0],[30,2096,2,0],[29,2096,3,0],[30,2096,4,0],[29,2096,4,1],[29,2096,5,0],[30,2096,6,0],[29,2096,7,0],[30,2096,8,0],[29,2096,9,0],[30,2096,10,0],[30,2096,11,0],[29,2096,12,0],[30,2097,1,0],[30,2097,2,0],[29,2097,3,0],[30,2097,4,0],[29,2097,5,0],[29,2097,6,0],[30,2097,7,0],[29,2097,8,0],[29,2097,9,0],[30,2097,10,0],[30,2097,11,0],[29,2097,12,0],[30,2098,1,0],[30,2098,2,0],[30,2098,3,0],[29,2098,4,0],[30,2098,5,0],[29,2098,6,0],[29,2098,7,0],[30,2098,8,0],[29,2098,9,0],[29,2098,10,0],[30,2098,11,0],[30,2098,12,0],[29,2099,1,0],[30,2099,2,0],[30,2099,3,0],[30,2099,3,1],[29,2099,4,0],[30,2099,5,0],[29,2099,6,0],[29,2099,7,0],[30,2099,8,0],[29,2099,9,0],[29,2099,10,0],[30,2099,11,0],[29,2099,12,0],[30,2100,1,0],[30,2100,2,0],[30,2100,3,0],[29,2100,4,0],[30,2100,5,0],[29,2100,6,0],[30,2100,7,0],[29,2100,8,0],[30,2100,9,0],[29,2100,10,0],[29,2100,11,0],[30,2100,12,0],[29,2101,1,0],[30,2101,2,0],[30,2101,3,0],[29,2101,4,0],[30,2101,5,0],[30,2101,6,0],[29,2101,7,0],[30,2101,7,1],[29,2101,8,0],[30,2101,9,0],[29,2101,10,0]]};
@@ -3683,293 +3534,73 @@ function buildYearReport(saju, year, opts = {}) {
 <script>
 (function(){
   "use strict";
-  const $ = (id) => document.getElementById(id);
+  var $ = function(id){ return document.getElementById(id); };
+  function intoView(el){ try { if (el && el.scrollIntoView) el.scrollIntoView({ block:"start" }); } catch(e){} }
 
-  function gift(){
-    const e = ($("gift-email") && $("gift-email").value || "").trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) return null;
-    return { email: e, message: ($("gift-msg") && $("gift-msg").value || "").trim() };
-  }
-
-  function paintMethod(rep){
-    const ms = document.getElementById("method-short");
-    const mf = document.getElementById("method-full");
-    if (!rep || !rep.method) return;
-    if (ms) ms.textContent = rep.method.short;
-    if (mf) mf.innerHTML = rep.method.full
-      .map(t => "<p>" + t.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>") + "</p>").join("");
-  }
-
-
-  // ── 구형 모바일 브라우저 대응 ─────────────
-  // iOS 15.3 이하에서 scrollTo({behavior:"instant"}) 는 TypeError 를 던져
-  // 그 뒤 코드가 전부 멈춥니다. 안전한 함수로 감쌉니다.
-  function toTop(){ try { window.scrollTo(0, 0); } catch(e) {} }
-  function intoView(el, opt){ try { if (el && el.scrollIntoView) el.scrollIntoView(opt); } catch(e) {} }
-
-  // 테스트 모드에서는 오류를 화면에 보여줍니다 (모바일 디버깅용)
-  function showErr(e){
-    if (!window.TEST_MODE) return;
-    let box = document.getElementById("__err");
-    if (!box) {
-      box = document.createElement("div");
-      box.id = "__err";
-      box.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:9999;background:#B5564A;color:#fff;" +
-        "font:600 12px/1.6 sans-serif;padding:12px 14px;border-radius:4px;white-space:pre-wrap;word-break:break-all";
-      box.onclick = () => box.remove();
-      document.body.appendChild(box);
-    }
-    box.textContent = "오류: " + (e && (e.message || e)) + "\n(눌러서 닫기)";
-  }
-  window.addEventListener("error", (ev) => showErr(ev.error || ev.message));
-  window.addEventListener("unhandledrejection", (ev) => showErr(ev.reason));
-  function guard(fn){ return function(){ try { return fn.apply(this, arguments); } catch(e) { showErr(e); } }; }
-
-
-
-  // pay.js 를 못 불러왔거나 서버가 없는 환경(미리보기 등)에서도 화면은 돌아가야 한다
-  if (typeof window.Pay === "undefined") {
-    window.Pay = {
-      list: () => [], tokens: () => [],
-      unlocked: () => false,
-      sync: async () => [], restore: async () => [],
-      open: async () => { throw new Error("결제 모듈을 불러오지 못했습니다"); },
-      confirm: async () => { throw new Error("결제 모듈을 불러오지 못했습니다"); },
-    };
-  }
-
-
-  const PRODUCT = "destiny", BUY_LABEL = "서른 가지 전부 열기";
-  let calendar = "solar", gender = "M", unlocked = false, cur = null, lastInput = null;
-
-  const jobSel = $("job");
-  const jobOpt0 = document.createElement("option");
-  jobOpt0.value = ""; jobOpt0.textContent = "선택 안 함";
-  jobSel.appendChild(jobOpt0);
-  JOB_OPTIONS.forEach(o => {
-    const el = document.createElement("option");
-    el.value = o.v; el.textContent = o.label;
-    jobSel.appendChild(el);
+  TAEKIL_PURPOSE.forEach(function(p){
+    var o = document.createElement("option");
+    o.value = p.v; o.textContent = p.label;
+    $("purpose").appendChild(o);
   });
-
-  const sel = $("city");
-  Object.keys(CITIES).forEach(name => {
-    const o = document.createElement("option");
+  var sel = $("city");
+  Object.keys(CITIES).forEach(function(name){
+    var o = document.createElement("option");
     o.value = name; o.textContent = name;
     if (name === "서울") o.selected = true;
     sel.appendChild(o);
   });
+  $("nohour").onchange = function(e){ $("hh").disabled = $("mi").disabled = e.target.checked; };
 
-  const toggle = (a,b,onA) => { a.setAttribute("aria-pressed",String(onA)); b.setAttribute("aria-pressed",String(!onA)); };
-  $("cal-solar").onclick = () => { calendar="solar"; toggle($("cal-solar"),$("cal-lunar"),true);  $("leap-wrap").style.display="none"; };
-  $("cal-lunar").onclick = () => { calendar="lunar"; toggle($("cal-solar"),$("cal-lunar"),false); $("leap-wrap").style.display="flex"; };
-  $("sx-m").onclick = () => { gender="M"; toggle($("sx-m"),$("sx-f"),true); };
-  $("sx-f").onclick = () => { gender="F"; toggle($("sx-m"),$("sx-f"),false); };
-  $("nohour").onchange = (e) => { $("hh").disabled = $("mi").disabled = e.target.checked; };
+  var KEY = "saju.profile.v1";
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch(e){ return null; } }
+  function save(o){ try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){} }
 
-  if (window.TEST_MODE) {
-    const tb = document.getElementById("testbar");
-    if (tb) tb.style.display = "block";
-    document.querySelectorAll(".buy").forEach(el => el.style.display = "none");
+  var p = load();
+  if (p) {
+    $("y").value = p.year; $("m").value = p.month; $("d").value = p.day;
+    if (!p.timeUnknown) { $("hh").value = p.hour; $("mi").value = p.minute; }
+    else { $("nohour").checked = true; $("hh").disabled = $("mi").disabled = true; }
+    if (p.city) sel.value = p.city;
   }
 
-  const KEY = "saju.profile.v1";
-  const save = (o) => { try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} };
-  const load = () => { try{ return JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){ return null; } };
-
-  function fail(msg){ const e=$("err"); e.textContent=msg; e.style.display="block"; }
-
-  $("submit").onclick = guard(() => {
-    $("err").style.display="none";
-    const y=+$("y").value, m=+$("m").value, d=+$("d").value, noHour=$("nohour").checked;
-    if(!y||!m||!d) return fail("생년월일을 모두 채워주세요.");
-    if(y<1900||y>2100) return fail("1900년부터 2100년까지 계산할 수 있습니다.");
-    const hh = noHour?0:(+$("hh").value||0), mi = noHour?0:(+$("mi").value||0);
-    const p = { year:y, month:m, day:d, hour:hh, minute:mi, gender, calendar,
-                leapMonth:$("leap").checked, city:sel.value, timeUnknown:noHour,
-                job: jobSel.value || "" };
-    try{ cur = computeSaju(p); }
-    catch(e){ return fail(calendar==="lunar"
-      ? "그 해에는 없는 음력 날짜입니다. 윤달 여부를 확인해주세요."
-      : "계산할 수 없는 날짜입니다."); }
-    save(p); lastInput = p;
-    render();
-  });
-
-  function render(){
-    const W = buildDestinyReport(cur, { job: (load() || {}).job || "" });
-    const md = (s) => String(s == null ? "" : s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\n/g,"<br>");
-    const S = W.stats;
-
-    $("stats").innerHTML = `
-      <p class="bowl">${S.count ? `배우자성 ${S.count}개` : "배우자성이 드러나지 않음"}</p>
-      <p class="who">${cur.pillars.day.gapjaCn} 일주 · ${S.level} · 용신 ${S.yongsin}</p>
-      <div class="bars">
-        <div class="bl"><span class="nm">배우자성</span><span class="tr2">${S.partnerEl}</span></div>
-        <div class="bl"><span class="nm">배우자궁</span><span class="tr2">${S.palaceCn} · ${S.palace}</span></div>
-        <div class="bl"><span class="nm">만나는 자리</span><span class="tr2">${S.place}</span></div>
-        <div class="bl"><span class="nm">다음 인연 해</span><span class="tr2">${S.nextYear ? S.nextYear + "년" : "세운으로 판단"}</span></div>
-      </div>
-      ${W.verify.length ? `<div class="verify">
-        <b>먼저 확인부터 하겠습니다</b>
-        ${W.verify.map(v => `<p><em>${v.from}~${v.to}세 ${v.gapjaCn}</em>${v.text}</p>`).join("")}
-        <span class="vq">이 대목이 맞다면, 나머지도 같은 방식으로 읽은 것입니다.</span>
-      </div>` : ""}`;
-
-    $("hook").innerHTML = W.hook.lines.map(l => `<p class="hl">${l}</p>`).join("")
-      + `<div class="turn">${W.hook.turn.map(l => `<p>${l}</p>`).join("")}</div>`;
-
-    $("qlist").innerHTML = W.sections.map(sec => `
-      <div class="qsec">
-        <h3>${sec.title}</h3>
-        <p class="ss">${sec.sub}</p>
-        ${sec.items.map(it => {
-          const open = it.free || unlocked;
-          return `<div class="qi${open?" free":" locked-row"}">
-            <button class="qhead" type="button" aria-expanded="false">
-              <span class="qn">${it.no}</span>
-              <span class="qt">${it.question}</span>
-              <span class="qk">${open?"열기":"🔒"}</span>
-            </button>
-            <div class="qbody">${it.body.map(p => `<p>${md(p)}</p>`).join("")}
-              ${it.evidence ? `<p class="ev"><b>이렇게 봤습니다</b>${it.evidence}</p>` : ""}
-              ${it.action ? `<p class="act"><b>해보실 것</b>${it.action}</p>` : ""}</div>
-          </div>`;
-        }).join("")}
-      </div>`).join("");
-
-    $("qlist").querySelectorAll(".qi").forEach(row => {
-      const btn = row.querySelector(".qhead");
-      btn.onclick = () => {
-        if (!row.classList.contains("free")) { intoView($("tease"), {behavior:"smooth",block:"center"}); return; }
-        const on = row.classList.toggle("open");
-        btn.setAttribute("aria-expanded", String(on));
-        row.querySelector(".qk").textContent = on ? "닫기" : "열기";
-      };
-    });
-    if (!unlocked) $("qlist").querySelectorAll(".qi.free").forEach(row => {
-      row.classList.add("open"); row.querySelector(".qk").textContent = "닫기";
-    });
-
-    $("tease-h").textContent = `${W.total - W.freeCount}가지가 더 남아 있습니다`;
-    $("tease-list").innerHTML = W.sections
-      .map(s => `<li>${s.title} — ${s.items.filter(i=>!i.free).length}문항</li>`).join("");
-    paintMethod(W);
-    $("tease").style.display = unlocked ? "none" : "block";
-    $("disc").textContent = W.disclaimer;
-
-    $("form").style.display = "none";
-    $("result").style.display = "block";
-    toTop();
-  }
-
-
-  // ── 궁합 (무료) ─────────────────────────
-  let cGender = "M", cSaju = null;
-  $("c-sx-m").onclick = () => { cGender="M"; $("c-sx-m").setAttribute("aria-pressed","true"); $("c-sx-f").setAttribute("aria-pressed","false"); };
-  $("c-sx-f").onclick = () => { cGender="F"; $("c-sx-m").setAttribute("aria-pressed","false"); $("c-sx-f").setAttribute("aria-pressed","true"); };
-  $("c-nohour").onchange = (e) => { $("c-hh").disabled = $("c-mi").disabled = e.target.checked; };
-
-  $("c-submit").onclick = () => {
-    $("c-err").style.display = "none";
-    const y=+$("c-y").value, m=+$("c-m").value, d=+$("c-d").value;
-    if(!y||!m||!d){ $("c-err").textContent="상대 생년월일을 모두 채워주세요."; $("c-err").style.display="block"; return; }
-    const nh = $("c-nohour").checked;
-    try{
-      cSaju = computeSaju({ year:y, month:m, day:d, hour: nh?0:(+$("c-hh").value||0),
-        minute: nh?0:(+$("c-mi").value||0), gender:cGender, city:"서울", timeUnknown:nh });
-    }catch(e){ $("c-err").textContent="계산할 수 없는 날짜입니다."; $("c-err").style.display="block"; return; }
-    paintCompat();
-  };
-
-  function paintCompat(){
-    const nameB = $("c-name").value.trim() || "그 사람";
-    const C = buildCompatReport(cur, cSaju, { nameA:"나", nameB });
-    const W = buildDestinyReport(cur, { job: (load() || {}).job || "" });
-    const need = W.stats.yongsin;
-    const hasNeed = cSaju.elements.find(e => e.name === need);
-    const metYear = cSaju ? null : null;
-
-    $("cresult").innerHTML = `
-      <div class="cscore">
-        <div class="num">${C.score}</div>
-        <div class="gd">${C.grade}</div>
-        <div class="pair">${C.a.gapja} 일주 · ${C.a.level}　｜　${C.b.gapja} 일주 · ${C.b.level}</div>
-      </div>
-      <div class="cnote">
-        <p><strong>확인 1.</strong> 당신에게 필요한 ${need} 기운을 ${nameB}은(는) ${hasNeed.ratio}% 가지고 있습니다.
-        ${hasNeed.ratio >= 25 ? "충분합니다. 곁에 있는 것만으로 부족한 자리가 채워집니다." : "넉넉하지는 않습니다. 기대서 해결되는 관계가 아니라 각자 채우고 만나는 관계입니다."}</p>
-        ${C.notes.map(n => `<p>${n}</p>`).join("")}
-      </div>
-      ${C.fields.map(f => `<div class="cfld">
-        <span class="ic">${f.icon}</span>
-        <div class="cb"><div class="cn">${f.name}</div><div class="ct">${f.text}</div></div>
-        <span class="csc">${f.score}</span>
-      </div>`).join("")}
-      <p class="cclose">${C.closing}</p>`;
-    $("cresult").style.display = "block";
-    intoView($("cresult"), { behavior:"smooth", block:"start" });
-  }
-
-  $("unlock").onclick = async () => {
-    const btn = $("unlock");
-    if (window.TEST_MODE) { unlocked = true; render(); return; }
-    const email = ($("buy-email").value || "").trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-      $("buy-email").focus(); btn.textContent = "이메일을 입력해주세요";
-      setTimeout(() => btn.textContent = BUY_LABEL, 1800); return;
+  function render(saju){
+    var T = buildTaekil(saju, { purpose: $("purpose").value, days: +$("range").value, count: 6 });
+    function row(d, bad){
+      return '<div class="row' + (bad ? " bad" : "") + '">' +
+        '<span class="rd"><b>' + d.label + '</b><em>' + d.dow + '요일</em></span>' +
+        '<span class="rg">' + d.ganji + '</span>' +
+        '<span class="rx">' + (bad ? d.caution : d.why) + '</span>' +
+        '<span class="rs">' + d.score + '</span></div>';
     }
-    if (!$("buy-agree").checked) {
-      btn.textContent = "환불 규정에 동의해주세요";
-      setTimeout(() => btn.textContent = BUY_LABEL, 1800); return;
-    }
-    btn.classList.add("paying"); btn.textContent = "결제창을 여는 중";
+    $("mine").innerHTML =
+      '<div class="score"><div class="hd"><span class="nm">' + saju.pillars.day.gapjaCn +
+        ' 일주 기준 · ' + T.range + '</span></div>' +
+        '<p class="hl" style="font-size:15px">' + T.tip + '</p></div>' +
+      '<p class="sect">' + T.purpose + '에 좋은 날</p>' + T.best.map(function(d){ return row(d,false); }).join('') +
+      '<p class="sect">피하는 편이 좋은 날</p>' + T.worst.map(function(d){ return row(d,true); }).join('') +
+      '<p class="memo">' + T.note + '</p>';
+    $("mine").style.display = "block";
+  }
+
+  $("submit").onclick = function(){
     try {
-      await Pay.open(PRODUCT, lastInput, email, gift());
-    } catch (e) {
-      btn.classList.remove("paying"); btn.textContent = e.message || "다시 시도해주세요";
-      setTimeout(() => btn.textContent = BUY_LABEL, 2200);
+      $("err").style.display = "none";
+      var y = +$("y").value, m = +$("m").value, d = +$("d").value, nh = $("nohour").checked;
+      if (!y || !m || !d) { $("err").textContent = "생년월일을 모두 넣어주세요."; $("err").style.display = "block"; return; }
+      if (y < 1900 || y > 2100) { $("err").textContent = "1900년부터 2100년까지 계산할 수 있습니다."; $("err").style.display = "block"; return; }
+      var prof = { year:y, month:m, day:d, hour: nh?0:(+$("hh").value||0), minute: nh?0:(+$("mi").value||0),
+                   gender:"M", calendar:"solar", leapMonth:false, city:sel.value, timeUnknown:nh };
+      var saju = computeSaju(prof);
+      save(prof);
+      render(saju);
+      intoView($("mine"));
+    } catch(e) {
+      $("err").textContent = "계산할 수 없는 날짜입니다. 입력값을 확인해주세요.";
+      $("err").style.display = "block";
     }
   };
-
-  // 다른 기기에서 산 경우 이메일로 복원
-  const rb = document.createElement("button");
-  rb.className = "restore"; rb.textContent = "이미 결제하셨나요? 이메일로 불러오기";
-  rb.onclick = async () => {
-    const email = prompt("결제하실 때 쓰신 이메일을 입력해주세요");
-    if (!email) return;
-    rb.textContent = "확인 중";
-    const list = await Pay.restore(email.trim());
-    if (list.includes(PRODUCT)) { unlocked = true; render(); }
-    else rb.textContent = "해당 이메일로 결제한 내역이 없습니다";
-  };
-  $("tease").appendChild(rb);
-
-  // 페이지를 열 때 서버에서 권한을 확인한다
-  (async () => {
-    if (window.TEST_MODE) return;
-    const list = await Pay.sync();
-    if (list.includes(PRODUCT)) { unlocked = true; if (cur) render(); }
-  })();
-  $("again").onclick = guard(() => {
-    $("result").style.display="none"; $("form").style.display="block";
-    toTop();
-  });
-
-  // 다른 화면에서 넣은 생년월일이 있으면 그대로 채운다
-  (function restore(){
-    const p = load(); if (!p) return;
-    $("y").value=p.year; $("m").value=p.month; $("d").value=p.day;
-    if (!p.timeUnknown) { $("hh").value=p.hour; $("mi").value=p.minute; }
-    else { $("nohour").checked=true; $("hh").disabled=$("mi").disabled=true; }
-    gender=p.gender; toggle($("sx-m"),$("sx-f"),p.gender==="M");
-    calendar=p.calendar; toggle($("cal-solar"),$("cal-lunar"),p.calendar==="solar");
-    $("leap-wrap").style.display = p.calendar==="lunar" ? "flex" : "none";
-    $("leap").checked=!!p.leapMonth; sel.value=p.city;
-    if (p.job) jobSel.value = p.job;
-    try{ cur = computeSaju(p); render(); }catch(e){}
-  })();
 })();
 </script>
+<script>if("serviceWorker" in navigator)addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){})});</script>
 </body>
 </html>

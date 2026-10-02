@@ -54,13 +54,14 @@
      * @param {object} birth       구매 시점의 생년월일 입력값 (재조회용)
      * @param {string} email       영수증과 복원에 쓰인다
      */
-    async open(productCode, birth, email) {
+    async open(productCode, birth, email, gift) {
       if (!email) throw new Error("이메일이 필요합니다");
 
       // 1) 서버에서 주문을 만든다. 금액은 서버가 정한다.
       const r = await fetch("/api/order", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productCode, email, birth }),
+        body: JSON.stringify({ productCode, email, birth,
+          giftEmail: gift && gift.email, giftMessage: gift && gift.message }),
       });
       const order = await r.json();
       if (!r.ok) throw new Error(order.message || "주문 생성에 실패했습니다");

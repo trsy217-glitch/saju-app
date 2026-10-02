@@ -1,6 +1,6 @@
 // sw.js — 껍데기만 캐싱한다. 결제·권한 조회는 절대 캐싱하지 않는다.
 const CACHE = "saju-v1";
-const SHELL = ["/home.html", "/index.html", "/wealth.html", "/tools.html", "/destiny.html", "/terms.html", "/pay.js", "/manifest.json"];
+const SHELL = ["/home.html", "/index.html", "/wealth.html", "/tools.html", "/taekil.html", "/today.html", "/samjae.html", "/destiny.html", "/terms.html", "/pay.js", "/manifest.json"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
