@@ -1,0 +1,10 @@
+.env
+.env.local
+.env.*.local
+node_modules/
+.vercel
+.DS_Store
+*.log
+*.code-workspace
+LMStudio/
+
